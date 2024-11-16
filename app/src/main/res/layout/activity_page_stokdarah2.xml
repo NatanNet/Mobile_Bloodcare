@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F9F9F9">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Stok darah"
+        android:textColor="#A6192E"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/icback"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/back"
+        android:layout_marginBottom="25dp" />
+
+    <EditText
+        android:id="@+id/editDarahTerkumpul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Darah terkumpul"
+        android:inputType="number"
+        android:background="@drawable/rounded_editteks"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/editKebutuhanDarah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Kebutuhan darah"
+        android:inputType="number"
+        android:background="@drawable/rounded_editteks"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jenis darah:"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinnerJenisDarah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_editteks"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/btnSimpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#D52D2D"
+        android:background="@drawable/rounded_button"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
+        android:text="Simpan"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:elevation="4dp" />
+
+
+</LinearLayout>

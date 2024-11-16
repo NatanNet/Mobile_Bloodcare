@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Lupa Kata Sandi"
+            android:textSize="20sp"
+            android:textColor="@color/merah" />
+        <TextView
+            android:layout_width="287dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:textColor="@color/merahpmi"
+            android:text="Kami akan mengirimkan 5 digit kode ke email Anda di bawah ini." />
+        <EditText
+            android:id="@+id/EtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:inputType="textEmailAddress"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:hint="Masukkan email" />
+        <Button
+            android:id="@+id/btn_kirim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:text="Kirim" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

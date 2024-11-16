@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".Page_acaradonor"
+    android:id="@+id/main"
+    android:padding="16dp">
+
+    <!-- Title -->
+
+    <!-- Image (could use an ImageView if you have an image asset) -->
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp"
+        android:text="Acara Donor"
+        android:textColor="#D52D2D"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="10dp"
+        app:srcCompat="@drawable/back" />
+
+    <ImageView
+        android:id="@+id/ivBanner"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_orang"
+        android:layout_gravity="center"/>
+
+    <!-- EditText for Address -->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Lokasi Donor"
+        android:layout_marginTop="40dp"
+        app:boxStrokeColor="@color/merahpmi">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextLokasiDonor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="15dp"
+            android:layout_margin="3dp"
+            android:inputType="text"
+            android:padding="20dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- EditText for Date (you might use a DatePicker here) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textColorHint="#4E4E4E"
+        android:backgroundTint="@color/merahpmi">
+
+        <EditText
+            android:id="@+id/etDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableStart="@drawable/calendar"
+            android:drawablePadding="10dp"
+            android:focusable="false"
+            android:hint="Pilih Tanggal"
+            android:padding="20dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Label Fasilitas -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="Fasilitas"
+        app:boxStrokeColor="@color/merahpmi">
+
+        <!-- Area input -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextFasilitas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_margin="3dp"
+            android:inputType="text"
+            android:padding="20dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Buttons for Save and Edit -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#D52D2D"
+            android:text="Simpan"
+            android:background="@drawable/rounded_button"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</LinearLayout>
+
+
+

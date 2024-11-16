@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/backbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Kembali"
+        android:src="@drawable/back"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Profile Section -->
+
+    <!-- Scrollable Form Section -->
+    <LinearLayout
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <!-- Profile Avatar -->
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/pplaki" />
+
+        <!-- Edit Profile Button -->
+        <Button
+            android:id="@+id/btneditpp"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:onClick="editProfileClick"
+            android:padding="10dp"
+            android:text="edit profil"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginBottom="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <!-- Email Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:inputType="textEmailAddress"
+                android:padding="12dp" />
+
+            <!-- Nama Lengkap Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Lengkap"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/etNamaLengkap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp" />
+
+            <!-- Nama Pengguna Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Pengguna"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:inputType="text"
+                android:padding="12dp" />
+
+            <!-- Tanggal Lahir Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tanggal Lahir"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/etTglLahir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:inputType="date"
+                android:padding="12dp" />
+
+            <!-- Nomor Telepon Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nomor Telepon"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/etNomorHp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:inputType="phone"
+                android:padding="12dp" />
+
+            <!-- Alamat Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alamat"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/EtAlamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
+                android:inputType="textPostalAddress"
+                android:padding="12dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="141dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/rounded_button"
+        android:text="Simpan"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Nama Pendonor" />
+    <EditText
+        android:id="@+id/et_nama_pendonor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yulia Gita Permata Sari" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lokasi Donor" />
+    <EditText
+        android:id="@+id/et_lokasi_donor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Balai Desa Warujayeng" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No HP/Email" />
+    <EditText
+        android:id="@+id/et_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="089467789000" />
+
+    <!-- Tambahkan field lain sesuai gambar... -->
+
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#D4D4D4" /> <!-- Warna saat ditekan -->
+            <corners android:radius="16dp" /> <!-- Radius yang lebih besar untuk sudut melengkung -->
+
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/grey" /> <!-- Warna default -->
+            <corners android:radius="16dp" /> <!-- Radius yang lebih besar untuk sudut melengkung -->
+        </shape>
+    </item>
+</selector>

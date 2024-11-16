@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <!-- Tombol kembali -->
+    <ImageButton
+        android:id="@+id/backbutton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Kembali"
+        android:src="@drawable/back"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Judul verifikasi -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Verifikasi Kode OTP"
+        android:textColor="@color/merah"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Instruksi -->
+    <TextView
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:text="Ketik kode 5 digit yang telah dikirim ke email anda"
+        android:textColor="@color/merahpmi"
+        android:textSize="14sp" />
+
+    <!-- Input Kode OTP -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="100dp">
+
+        <!-- 5 kotak input untuk kode OTP -->
+        <EditText
+            android:id="@+id/text1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/otp_background"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/text2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/otp_background"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/text3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/otp_background"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/text4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/otp_background"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="4dp"/>
+
+        <EditText
+            android:id="@+id/text5"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/otp_background"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="4dp"/>
+    </LinearLayout>
+
+    <!-- Teks Kirim Ulang -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/poppins_light"
+            android:text="Belum menerima kode? "
+            android:textColor="#8A8A8A"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Kirim Ulang"
+            android:textColor="@color/merahpmi"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Tombol Verifikasi -->
+    <Button
+        android:id="@+id/btn_verifikasi"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Verifikasi"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+</LinearLayout>

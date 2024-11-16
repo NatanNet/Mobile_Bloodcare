@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Repeating structure for each blood type -->
+
+        <!-- Golongan darah A -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganAplus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/textAplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="A+"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulAplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahAplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditAplus"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <!-- Repeat the same structure for each blood type -->
+
+        <!-- Golongan darah A+ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganAmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahAmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="A-"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulAmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahAmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/iconEditAmin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <!-- Repeat for B+, B-, AB+, AB-, O+, O- -->
+        <!-- Modify only the text inside @id/tvGolonganDarah -->
+        <!--    ab-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganBplus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahBplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="B+"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulBplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahBplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditBplus"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <!--    b-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganBmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahBmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="B-"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulBmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahBmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditBmin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <!--    b+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganABplus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="AB+"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulABplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahABplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditABplus"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganABmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahABmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="AB+"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulABmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahABmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditABmin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganOplus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahOplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="O+"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulOplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahOplus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditOplus"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@drawable/bg_acaraputih"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/iconGolonganOmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_persegi" />
+                <TextView
+                    android:id="@+id/GolonganDarahOmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="O-"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+                <TextView
+                    android:id="@+id/DarahTerkumpulOmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darah terkumpul: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/KebutuhanDarahOmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kebutuhan darah: 0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iconEditOmin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Data"
+                android:padding="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:layout_gravity="center">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/backbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Kembali"
+        android:src="@drawable/back"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Profile Section -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="80dp">
+
+        <!-- Profile Avatar -->
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/pplaki"
+            android:layout_gravity="center" />
+
+        <!-- Edit Profile Button -->
+        <Button
+            android:id="@+id/btneditpp"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:onClick="editProfileClick"
+            android:padding="10dp"
+            android:text="Detail profil"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Profile Name -->
+        <TextView
+            android:id="@+id/profilname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amar dj remake"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <!-- Profile Email -->
+        <TextView
+            android:id="@+id/profilemail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="amardj@gmail.com"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="4dp" />
+
+        <!-- Profile Phone -->
+        <TextView
+            android:id="@+id/tvProfilePhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08966789901"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Account and Security Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="65dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Akun dan keamanan"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"/>
+
+        <!-- Ganti Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_key" />
+
+            <TextView
+                android:id="@+id/tvGantiPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Ganti Password"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_next" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alat &amp; Integrasi"
+            android:textSize="15sp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"/>
+
+        <!-- Pusat Bantuan -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_headset" />
+
+            <TextView
+                android:id="@+id/tvPusatBantuan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Pusat Bantuan"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_next" />
+        </LinearLayout>
+
+        <!-- Tentang Kami -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_hp" />
+
+            <TextView
+                android:id="@+id/tvTentangKami"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Tentang Kami"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_next" />
+        </LinearLayout>
+
+        <!-- Keluar Akun -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_keluar" />
+
+            <TextView
+                android:id="@+id/tvKeluarAkun"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Keluar Akun"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_next" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

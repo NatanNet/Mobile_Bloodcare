@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:id="@+id/main"
+        android:gravity="center_horizontal">
+
+        <!-- Teks Selamat Datang -->
+        <TextView
+            android:id="@+id/welcome_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginRight="30sp"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingTop="50dp"
+            android:text="Selamat Datang di BloodCare"
+            android:textColor="@color/merah"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/description_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Masuk untuk mengakses BloodCare dan lanjutkan aktivitasmu"
+            android:textColor="@color/merahpmi"
+            android:textSize="14sp" />
+
+        <!-- EditText untuk Email/Username -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email/Username"
+            app:boxStrokeColor="@color/white"
+            app:hintEnabled="true"
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textusername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- EditText untuk Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:boxStrokeColor="@color/white"
+            app:hintEnabled="true"
+            android:layout_marginTop="5dp"
+            app:endIconMode="password_toggle"
+            app:helperTextEnabled="true"
+            app:helperText="Enter Password"
+            app:helperTextTextColor="@color/merahpmi">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:padding="10dp"
+
+                android:drawableEnd="@drawable/ic_eye"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_eye"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/forgot_password_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Lupa Kata Sandi?"
+            android:textColor="@color/merahpmi"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Masuk"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_button"/>
+
+        <!-- Divider dan teks "atau" -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+        </LinearLayout>
+
+        <!-- Link Daftar -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:id="@+id/textquestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
+                android:text="Belum punya akun? "
+                android:textColor="@color/merahpmi"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/register_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Daftar"
+                android:textColor="@color/merahpmi"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

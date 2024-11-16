@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="merahpmi">#B03B3B</color>
+    <color name="merah">#6A0812</color>
+    <color name="grey">#EDEDED</color>
+    <color name="merah2">#A23131</color>
+    <color name="abu2">#999999</color>
+</resources>

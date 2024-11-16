@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "972275823173",
+    "project_id": "otpverif-612c1",
+    "storage_bucket": "otpverif-612c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972275823173:android:5c849e649ae46a77ea292c",
+        "android_client_info": {
+          "package_name": "com.example.bloodcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAE1RxLciKq16QBN6Z05yHP4YoZhl1wiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972275823173:android:231f8d8eba1353aaea292c",
+        "android_client_info": {
+          "package_name": "com.millenialzdev.otpsmsauthfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAE1RxLciKq16QBN6Z05yHP4YoZhl1wiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Grup Hari -->
+    <item android:id="@+id/group_hari" android:title="Hari">
+        <menu>
+        <item
+            android:id="@+id/item_senin"
+            android:title="Senin" />
+        <item 
+            android:id="@+id/item_selasa"
+            android:title="Selasa" />
+        <item
+            android:id="@+id/item_rabu"
+            android:title="Rabu" />
+        <item
+            android:id="@+id/item_kamis"
+            android:title="Kamis" />
+        <item
+            android:id="@+id/item_jumat"
+            android:title="Jumat" />
+        </menu>
+    </item>
+
+    <!-- Grup Minggu -->
+    <group android:id="@+id/group_minggu" android:title="Minggu">
+        <item
+            android:id="@+id/item_minggu_ini"
+            android:title="Minggu Ini" />
+        <item
+            android:id="@+id/item_minggu_lalu"
+            android:title="Minggu Lalu" />
+    </group>
+
+    <!-- Grup Bulan -->
+    <group android:id="@+id/group_bulan" android:title="Bulan">
+        <item
+            android:id="@+id/item_bulan_ini"
+            android:title="Bulan Ini" />
+        <item
+            android:id="@+id/item_bulan_lalu"
+            android:title="Bulan Lalu" />
+    </group>
+
+    <!-- Item Tambahan -->
+    <item
+        android:id="@+id/item_semua"
+        android:title="Semua" />
+</menu>
