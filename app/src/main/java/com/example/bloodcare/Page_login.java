@@ -121,12 +121,12 @@ public class Page_login extends AppCompatActivity {
                                     startActivity(intent);
                                     finish();
                                 }else {
-                                        // Jika ingin membuka ActivityDashboard dan langsung menampilkan Fragment Page_edit_akun
-                                        Intent intent = new Intent(Page_login.this, Page_dashboard.class);
-                                        intent.putExtra("user_id", userId);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+                                    // Jika ingin membuka ActivityDashboard dan langsung menampilkan Fragment Page_edit_akun
+                                    Intent intent = new Intent(Page_login.this, Page_dashboard.class);
+                                    intent.putExtra("user_id", userId);
+                                    startActivity(intent);
+                                    finish();
+                                }
 
                             } else {
                                 String message = response.getString("message");

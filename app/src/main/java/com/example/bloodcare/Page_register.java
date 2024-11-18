@@ -2,6 +2,7 @@ package com.example.bloodcare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +30,7 @@ public class Page_register extends AppCompatActivity {
 
     private EditText editTextUsername, editTextEmail, editTextPassword, editTextConfirmPassword;
     private Button buttonDaftar;
-    private static final String REGISTER_URL = Config.BASE_URL + "login.php"; // Ganti dengan URL API Anda
+    private static final String REGISTER_URL = Config.BASE_URL + "register.php"; // Ganti dengan URL API Anda
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,8 @@ public class Page_register extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("ServerResponse", response);  // Menambahkan log untuk melihat response
                         try {
-                            // Mengubah response menjadi JSON
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             String message = jsonResponse.getString("message");
@@ -114,7 +115,7 @@ public class Page_register extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(Page_register.this, "Kesalahan parsing data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Page_register.this, "Kesalahan parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
