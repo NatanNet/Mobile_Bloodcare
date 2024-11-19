@@ -1,9 +1,11 @@
 package com.example.bloodcare;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -16,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Page_laporan extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,13 +68,6 @@ public class Page_laporan extends AppCompatActivity {
 
         //Iki digae memasukkan id setiap text view nama
         // Tambahkan setelah iconLaporan.setOnClickListener
-        TextView tvNatan = findViewById(R.id.tvNatan);
-        TextView NamaAmar = findViewById(R.id.NamaAmar);
-        TextView NamaGita = findViewById(R.id.NamaGita);
-        TextView NamaApril = findViewById(R.id.NamaApril);
-        TextView NamaSasa = findViewById(R.id.NamaSasa);
-        TextView NamaAzkai = findViewById(R.id.NamaAzkai);
-
         //iki id setiap lihat
         TextView tvLihatNatan = findViewById(R.id.tvLihatNatan);
         TextView LihatAmar = findViewById(R.id.LihatAmar);
@@ -83,9 +77,8 @@ public class Page_laporan extends AppCompatActivity {
         TextView LihatAzkai = findViewById(R.id.LihatAzkai);
 
 
-
         //kode iki gae ben nama dan lihat iso diklik boy
-        tvNatan.setOnClickListener(new View.OnClickListener() {
+        tvLihatNatan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -94,7 +87,7 @@ public class Page_laporan extends AppCompatActivity {
         });
 
         // Atur OnClickListener untuk register TextView
-        NamaAmar.setOnClickListener(new View.OnClickListener() {
+        LihatAmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -102,7 +95,7 @@ public class Page_laporan extends AppCompatActivity {
             }
         });
 
-        NamaGita.setOnClickListener(new View.OnClickListener() {
+        LihatGita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -110,7 +103,7 @@ public class Page_laporan extends AppCompatActivity {
             }
         });
 
-        NamaApril.setOnClickListener(new View.OnClickListener() {
+        LihatApril.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -118,7 +111,7 @@ public class Page_laporan extends AppCompatActivity {
             }
         });
 
-        NamaSasa.setOnClickListener(new View.OnClickListener() {
+        LihatSasa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -126,20 +119,16 @@ public class Page_laporan extends AppCompatActivity {
             }
         });
 
-        NamaAzkai.setOnClickListener(new View.OnClickListener() {
+        LihatAzkai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
                 startActivity(intent);
             }
         });
-
-        tvLihatNatan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "Lihat data Natan dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
+    }
+}
+/*
 
         LihatAmar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,3 +166,4 @@ public class Page_laporan extends AppCompatActivity {
         });
     }
 }
+*/

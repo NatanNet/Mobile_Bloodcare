@@ -1,17 +1,17 @@
 package com.example.bloodcare;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -23,62 +23,50 @@ import java.util.ArrayList;
 public class Page_datapendonor2 extends AppCompatActivity {
 
     private ListView listView;
-    private SearchView searchView;
     private ArrayAdapter<String> adapter;
-    private ArrayList<String> donorNames;
+    private ArrayList<String> donorList;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_datapendonor2);
 
-        // Inisialisasi komponen
         listView = findViewById(R.id.listView);
-        searchView = findViewById(R.id.searchView);
-        donorNames = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, donorNames);
+        donorList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, donorList);
         listView.setAdapter(adapter);
 
-        // Listener untuk SearchView
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                fetchDonorData(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                fetchDonorData(newText);
-                return false;
-            }
-        });
+        fetchDonorData();
     }
 
-    private void fetchDonorData(String query) {
-        String url = "http://172.16.110.36/server_bloodcare/cari.php"; // Ganti dengan URL API Anda
+    private void fetchDonorData() {
+        String url = Config.BASE_URL + "get_pendonor.php"; // Ganti dengan URL server PHP Anda
 
-        // Tambahkan parameter query ke URL
-        url += "?query=" + query;
-
-        // Membuat request ke server
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray dataArray = jsonObject.getJSONArray("data");
+                            if (response.getString("status").equals("success")) {
+                                JSONArray dataArray = response.getJSONArray("data");
+                                donorList.clear();
 
-                            donorNames.clear();
-                            for (int i = 0; i < dataArray.length(); i++) {
-                                JSONObject dataObj = dataArray.getJSONObject(i);
-                                donorNames.add(dataObj.getString("nama_pendonor"));
+                                for (int i = 0; i < dataArray.length(); i++) {
+                                    JSONObject dataObj = dataArray.getJSONObject(i);
+                                    String namaPendonor = dataObj.getString("nama_pendonor");
+                                    String goldar = dataObj.getString("goldar");
+                                    String rhesus = dataObj.getString("rhesus");
+
+                                    // Format data untuk ditampilkan
+                                    String formattedData = "Nama: " + namaPendonor + "\nGolongan Darah: " + goldar + " " + rhesus;
+                                    donorList.add(formattedData);
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
                             }
-
-                            adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -87,10 +75,11 @@ public class Page_datapendonor2 extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                String errorMessage = error.getMessage();
+                Toast.makeText(Page_datapendonor2.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
             }
         });
 
-        // Tambahkan request ke queue
-        queue.add(stringRequest);
+        queue.add(jsonObjectRequest);
     }
 }

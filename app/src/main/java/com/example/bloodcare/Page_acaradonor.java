@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,7 +31,7 @@ public class Page_acaradonor extends AppCompatActivity {
         editTextData = findViewById(R.id.editTextLokasiDonor);  // Hanya set salah satu
 
         buttonSimpan = findViewById(R.id.btnSave);
-
+        ImageButton buttonback = findViewById(R.id.imageButton3);
         etDate.setOnClickListener(v -> showDatePicker());
 
         buttonSimpan.setOnClickListener(new View.OnClickListener() {
@@ -47,8 +48,14 @@ public class Page_acaradonor extends AppCompatActivity {
                 }
             }
         });
-    }
 
+          buttonback.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    });
+}
     private void showDatePicker() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
