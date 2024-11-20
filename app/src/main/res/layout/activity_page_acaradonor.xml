@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+<LinearLayout
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".Page_acaradonor"
     android:id="@+id/main"
@@ -45,10 +51,10 @@
 
     <ImageView
         android:id="@+id/ivBanner"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@drawable/ic_orang"
-        android:layout_gravity="center"/>
+        android:layout_width="411dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_orang" />
 
     <!-- EditText for Address -->
 
@@ -61,6 +67,24 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextLokasiDonor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="15dp"
+            android:layout_margin="3dp"
+            android:inputType="text"
+            android:padding="20dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Lokasi Donor"
+        android:layout_marginTop="40dp"
+        app:boxStrokeColor="@color/merahpmi">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextwaktuDonor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -127,8 +151,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
             android:layout_weight="1"
             android:backgroundTint="#D52D2D"
             android:text="Simpan"
@@ -140,3 +164,4 @@
 
 
 
+</androidx.core.widget.NestedScrollView>

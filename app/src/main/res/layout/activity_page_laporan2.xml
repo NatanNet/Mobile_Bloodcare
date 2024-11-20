@@ -38,5 +38,13 @@
         android:text="089467789000" />
 
     <!-- Tambahkan field lain sesuai gambar... -->
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Golongan darah" />
+    <EditText
+        android:id="@+id/et_golda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="O-" />
 </LinearLayout>

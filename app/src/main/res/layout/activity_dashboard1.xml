@@ -18,7 +18,7 @@
             android:layout_height="64dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
-            android:text="Halo,\nAdmin!"
+            android:text="Halo,\nazka!"
             android:textColor="#000000"
             android:textSize="20sp" />
 

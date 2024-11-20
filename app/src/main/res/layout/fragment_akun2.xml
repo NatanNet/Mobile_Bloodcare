@@ -43,7 +43,6 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/rounded_background"
             android:gravity="center"
-            android:onClick="editProfileClick"
             android:padding="10dp"
             android:layout_gravity="center"
             android:text="edit profil"
