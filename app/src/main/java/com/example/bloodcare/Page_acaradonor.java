@@ -117,7 +117,7 @@ public class Page_acaradonor extends AppCompatActivity {
             String formattedDate = outputFormat.format(date);
 
             // Kirim tanggal yang telah diformat ke server
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.0.106/website_bloodcare/api/mobile/tambah_acara.php",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.1.125/website_bloodcare/api/mobile/tambah_acara.php",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
