@@ -28,14 +28,15 @@ public class Page_otpverif extends AppCompatActivity {
     private Button btnVerifikasi;
     private String verificationId;
     private String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main5); // Ganti dengan layout yang sesuai
 
-        // Mendapatkan verificationId dari intent
+        // Mendapatkan verificationId dan email dari intent
         verificationId = getIntent().getStringExtra("verificationId");
-        email=  getIntent().getStringExtra("email");
+        email = getIntent().getStringExtra("email");
 
         // Menginisialisasi komponen UI
         text1 = findViewById(R.id.text1);
@@ -58,7 +59,6 @@ public class Page_otpverif extends AppCompatActivity {
 
         // Menangani klik tombol verifikasi
         btnVerifikasi.setOnClickListener(v -> {
-
             String otp = text1.getText().toString() + text2.getText().toString() +
                     text3.getText().toString() + text4.getText().toString() +
                     text5.getText().toString();
@@ -118,10 +118,11 @@ public class Page_otpverif extends AppCompatActivity {
 
                             if (status.equals("success")) {
                                 Toast.makeText(Page_otpverif.this, "Verifikasi sukses", Toast.LENGTH_SHORT).show();
-                                // Lakukan pengalihan ke halaman berikutnya setelah sukses
-                                 Intent intent = new Intent(Page_otpverif.this, Page_forgotpass.class);
-                                 startActivity(intent);
-                                 finish();
+                                // Lakukan pengalihan ke halaman ganti password setelah OTP diverifikasi
+                                Intent intent = new Intent(Page_otpverif.this, Page_forgotpass.class);
+                                intent.putExtra("email", email);  // Kirimkan email ke halaman ganti password
+                                startActivity(intent);
+                                finish();
                             } else {
                                 String message = response.getString("message");
                                 Toast.makeText(Page_otpverif.this, message, Toast.LENGTH_SHORT).show();

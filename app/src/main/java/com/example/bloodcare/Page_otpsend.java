@@ -37,8 +37,14 @@ public class Page_otpsend extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         sendOtpButton.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
+
+                // Menonaktifkan tombol setelah diklik
+                sendOtpButton.setEnabled(false);
+
                 String email = emailEditText.getText().toString().trim();
                 if (!email.isEmpty()) {
                     sendOtp(email);

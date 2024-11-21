@@ -24,7 +24,9 @@ import org.json.JSONObject;
 public class Page_detail_akun extends Fragment {
 
     private EditText editTextEmail, editTextUsername, editTextNamaLengkap, editTextTanggalLahir, editTextNoHp, editTextAlamat;
-    private static final String DETAIL_AKUN_URL = "http://192.168.1.40/akun_detail.php"; // Ganti dengan URL API Anda
+    private static final String DETAIL_AKUN_URL = Config.BASE_URL + "akun_detail.php"; // Ganti dengan URL API Anda
+
+    private static final int DEFAULT_ID_AKUN = 11; // ID default
 
     public Page_detail_akun() {
         // Required empty public constructor
@@ -45,14 +47,17 @@ public class Page_detail_akun extends Fragment {
         editTextAlamat = view.findViewById(R.id.EtAlamat);
 
         // Memuat data dari server
-        loadDataAkun();
+        loadDataAkun(DEFAULT_ID_AKUN); // Menggunakan ID default
 
         return view;
     }
 
-    private void loadDataAkun() {
+    private void loadDataAkun(int idAkun) {
+        // Menambahkan parameter id_akun ke URL
+        String urlWithId = DETAIL_AKUN_URL + "?id_akun=" + idAkun;
+
         // Buat request JSON untuk mendapatkan detail akun
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, DETAIL_AKUN_URL, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWithId, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -62,12 +67,12 @@ public class Page_detail_akun extends Fragment {
                                 JSONObject data = response.getJSONObject("data");
 
                                 // Set data ke EditText
-                                editTextEmail.setText(data.getString("email"));
-                                editTextUsername.setText(data.getString("username"));
-                                editTextNamaLengkap.setText(data.getString("nama_lengkap"));
-                                editTextTanggalLahir.setText(data.getString("tanggal_lahir"));
-                                editTextNoHp.setText(data.getString("no_handphone"));
-                                editTextAlamat.setText(data.getString("alamat"));
+                                editTextEmail.setText(data.optString("email", ""));
+                                editTextUsername.setText(data.optString("username", ""));
+                                editTextNamaLengkap.setText(data.optString("nama_lengkap", ""));
+                                editTextTanggalLahir.setText(data.optString("tanggal_lahir", ""));
+                                editTextNoHp.setText(data.optString("no_hp", ""));
+                                editTextAlamat.setText(data.optString("alamat", ""));
                             } else {
                                 Toast.makeText(getContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show();
                             }
