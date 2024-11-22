@@ -5,12 +5,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class Page_stokdarah2 extends AppCompatActivity {
 
@@ -22,11 +19,9 @@ public class Page_stokdarah2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_stokdarah2);
 
-        // Inisialisasi EditText
+        // Inisialisasi View
         edtDarahTerkumpul = findViewById(R.id.editDarahTerkumpul);
         edtKebutuhanDarah = findViewById(R.id.editKebutuhanDarah);
-
-        // Inisialisasi Spinner
         spinnerJenisDarah = findViewById(R.id.spinnerJenisDarah);
 
         // Array untuk jenis darah
@@ -42,13 +37,38 @@ public class Page_stokdarah2 extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerJenisDarah.setAdapter(adapter);
 
-        // Menganbil tombol dari xml dan memberikan fungsi tombol
-        findViewById(R.id.icback).setOnClickListener(new View.OnClickListener() {
+        // Tombol kembali
+        findViewById(R.id.icback).setOnClickListener(v -> onBackPressed());
+
+        // Tombol Simpan
+        findViewById(R.id.btnSimpan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aksi untuk kembali ke Activity sebelumnya
-                onBackPressed();
+                saveData();
             }
         });
+    }
+
+    private void saveData() {
+        // Ambil input dari user
+        String darahTerkumpul = edtDarahTerkumpul.getText().toString().trim();
+        String kebutuhanDarah = edtKebutuhanDarah.getText().toString().trim();
+        String jenisDarah = spinnerJenisDarah.getSelectedItem().toString();
+
+        // Validasi input
+        if (darahTerkumpul.isEmpty() || kebutuhanDarah.isEmpty()) {
+            Toast.makeText(this, "Mohon lengkapi semua data!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Proses penyimpanan data (contoh: API request atau database)
+        // Misalnya, simpan ke server menggunakan Volley atau Retrofit
+        Toast.makeText(this, "Data berhasil disimpan:\n" +
+                "Jenis Darah: " + jenisDarah +
+                "\nDarah Terkumpul: " + darahTerkumpul +
+                "\nKebutuhan Darah: " + kebutuhanDarah, Toast.LENGTH_LONG).show();
+
+        // Kembali ke halaman sebelumnya
+        finish();
     }
 }

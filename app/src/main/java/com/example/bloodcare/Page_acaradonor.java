@@ -128,7 +128,7 @@ public class Page_acaradonor extends AppCompatActivity {
                                     Toast.makeText(Page_acaradonor.this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
 
                                     // Setelah data disimpan, pindah ke Page_acaradonor2
-                                    Intent intent = new Intent(Page_acaradonor.this, Page_acaradonor2.class);
+                                    Intent intent = new Intent(Page_acaradonor.this, Page_acara.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(Page_acaradonor.this, "Gagal menyimpan data", Toast.LENGTH_SHORT).show();

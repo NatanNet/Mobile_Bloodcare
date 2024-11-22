@@ -1,11 +1,12 @@
 package com.example.bloodcare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,9 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -26,114 +25,126 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Page_acara extends Fragment {
 
     private ListView listView;
-    private TextView detailTextView;
-
-    private ArrayList<String> lokasiList = new ArrayList<>();
-    private ArrayList<String> fasilitasList = new ArrayList<>();
-    private ArrayList<String> waktuList = new ArrayList<>();
-    private ArrayList<String> tglList = new ArrayList<>();
-
-    public Page_acara() {
-        // Required empty public constructor
-    }
+    private ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
+    private String GET_URL = "http://192.168.1.125/website_bloodcare/api/mobile/get_dataAcara.php";
+    private String DELETE_URL = "http://192.168.1.125/website_bloodcare/api/mobile/delete_donor.php";
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        // Membuat container utama untuk layout
-        LinearLayout parentLayout = new LinearLayout(requireContext());
-        parentLayout.setOrientation(LinearLayout.VERTICAL);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_dashboard2, container, false);
 
-        // Tambahkan layout pertama
-        View layoutPertama = inflater.inflate(R.layout.activity_dashboard2, parentLayout, false);
-        listView = layoutPertama.findViewById(R.id.listView); // Pastikan ada ListView dengan ID listView
-        parentLayout.addView(layoutPertama);
+        listView = view.findViewById(R.id.listView);
+        fetchData();
 
-        // Tambahkan layout kedua
-        View layoutKedua = inflater.inflate(R.layout.activity_dashboard_2, parentLayout, false);
-        detailTextView = layoutKedua.findViewById(R.id.textNama); // Pastikan ada TextView dengan ID detailTextView
-        parentLayout.addView(layoutKedua);
-
-        // Ambil data dari server
-        fetchDataFromServer();
-
-        return parentLayout;
+        return view;
     }
 
-    private void fetchDataFromServer() {
-        // URL file PHP (ganti dengan URL server Anda)
-        String url = "https://192.168.1.125/get_dataAcara.php";
+    private void fetchData() {
+        StringRequest request = new StringRequest(Request.Method.GET, GET_URL,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getBoolean("success")) {
+                            JSONArray data = jsonObject.getJSONArray("data");
+                            dataList.clear();
 
-        // Buat permintaan JSON Array
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            // Parsing data dari response JSON
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject jsonObject = response.getJSONObject(i);
-
-                                // Ambil data
-                                String lokasi = jsonObject.getString("lokasi");
-                                String fasilitas = jsonObject.getString("fasilitas");
-                                String time_waktu = jsonObject.getString("time_waktu");
-                                String tgl_acara = jsonObject.getString("tgl_acara");
-
-                                // Tambahkan ke ArrayList
-                                lokasiList.add(lokasi);
-                                fasilitasList.add(fasilitas);
-                                waktuList.add(time_waktu);
-                                tglList.add(tgl_acara);
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject obj = data.getJSONObject(i);
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("id_acara", obj.getString("id_acara"));
+                                map.put("lokasi", obj.getString("lokasi"));
+                                map.put("fasilitas", obj.getString("fasilitas"));
+                                map.put("time_waktu", obj.getString("time_waktu"));
+                                map.put("tgl_acara", obj.getString("tgl_acara"));
+                                dataList.add(map);
                             }
 
-                            // Update ListView dengan data
-                            updateListView();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(requireContext(), "Error parsing data.", Toast.LENGTH_SHORT).show();
+                            CustomAdapter adapter = new CustomAdapter();
+                            listView.setAdapter(adapter);
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Error parsing data", Toast.LENGTH_SHORT).show();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Tampilkan pesan error
-                        Toast.makeText(requireContext(), "Error fetching data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                error -> Toast.makeText(getContext(), "Gagal mengambil data", Toast.LENGTH_SHORT).show());
 
-        // Tambahkan request ke antrian Volley
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        requestQueue.add(jsonArrayRequest);
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
     }
 
-    private void updateListView() {
-        // Buat daftar item untuk ditampilkan
-        ArrayList<String> items = new ArrayList<>();
-        for (int i = 0; i < lokasiList.size(); i++) {
-            String item = "Lokasi: " + lokasiList.get(i) + "\n" +
-                    "Fasilitas: " + fasilitasList.get(i) + "\n" +
-                    "Waktu: " + waktuList.get(i) + "\n" +
-                    "Tanggal: " + tglList.get(i);
-            items.add(item);
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return dataList.size();
         }
 
-        // Set data ke ListView menggunakan ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(adapter);
+        @Override
+        public Object getItem(int position) {
+            return dataList.get(position);
+        }
 
-        // Atur listener untuk klik item
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedItem = items.get(position);
-            detailTextView.setText(selectedItem);
-        });
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_dashboard2_, parent, false);
+            }
+
+            TextView textNama = convertView.findViewById(R.id.textNama);
+            ImageButton btnEdit = convertView.findViewById(R.id.btnEdit);
+            ImageButton btnDelete = convertView.findViewById(R.id.btnDelete); // Tombol hapus ditambahkan
+
+            HashMap<String, String> item = dataList.get(position);
+            textNama.setText(item.get("lokasi"));
+
+            btnEdit.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), Page_acaradonor.class);
+                intent.putExtra("id_acara", item.get("id_acara"));
+                intent.putExtra("lokasi", item.get("lokasi"));
+                intent.putExtra("fasilitas", item.get("fasilitas"));
+                intent.putExtra("time_waktu", item.get("time_waktu"));
+                intent.putExtra("tgl_acara", item.get("tgl_acara"));
+                startActivity(intent);
+            });
+
+            btnDelete.setOnClickListener(v -> {
+                // Memanggil fungsi deleteData() dengan id acara
+                deleteData(item.get("id_acara"));
+            });
+
+            return convertView;
+        }
+    }
+
+    private void deleteData(String id) {
+        StringRequest request = new StringRequest(Request.Method.POST, DELETE_URL,
+                response -> {
+                    Toast.makeText(getContext(), "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
+                    fetchData(); // Refresh data setelah penghapusan
+                },
+                error -> Toast.makeText(getContext(), "Gagal menghapus data", Toast.LENGTH_SHORT).show()) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", id); // Mengirimkan parameter "id" ke API
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
     }
 }
