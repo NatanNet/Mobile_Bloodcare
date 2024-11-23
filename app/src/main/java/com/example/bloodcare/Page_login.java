@@ -2,36 +2,37 @@ package com.example.bloodcare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Page_login extends AppCompatActivity {
 
-    private EditText editUsername, editPassword;
+    private TextInputEditText editUsername, editPassword;
+    private TextInputLayout textInputLayoutPassword;
     private Button buttonLogin;
     private TextView register, forgotPass;
 
@@ -48,44 +49,82 @@ public class Page_login extends AppCompatActivity {
         // Inisialisasi UI
         editUsername = findViewById(R.id.textusername);
         editPassword = findViewById(R.id.textpass);
+        textInputLayoutPassword = findViewById(R.id.TextInputLayout); // Layout untuk validasi password
         buttonLogin = findViewById(R.id.login_button);
         register = findViewById(R.id.register_text);
         forgotPass = findViewById(R.id.forgot_password_text);
 
-        // OnClickListener untuk register
-        register.setOnClickListener(new View.OnClickListener() {
+        // Tambahkan TextWatcher untuk validasi password
+        editPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Page_login.this, Page_register.class));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Tidak perlu implementasi
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validatePassword(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Tidak perlu implementasi
             }
         });
+
+        // OnClickListener untuk register
+        register.setOnClickListener(v -> startActivity(new Intent(Page_login.this, Page_register.class)));
 
         // OnClickListener untuk forgot password
-        forgotPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Page_login.this, Page_otpsend.class));
-            }
-        });
+        forgotPass.setOnClickListener(v -> startActivity(new Intent(Page_login.this, Page_otpsend.class)));
 
         // OnClickListener untuk login
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username_or_email = editUsername.getText().toString().trim();
-                String password = editPassword.getText().toString().trim();
+        buttonLogin.setOnClickListener(v -> {
+            String usernameOrEmail = editUsername.getText().toString().trim();
+            String password = editPassword.getText().toString().trim();
 
-                // Validasi input
-                if (TextUtils.isEmpty(username_or_email) || TextUtils.isEmpty(password)) {
-                    Toast.makeText(Page_login.this, "Username dan Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                } else {
-                    loginUser(username_or_email, password);
-                }
+            // Validasi input username dan password
+            if (TextUtils.isEmpty(usernameOrEmail) || TextUtils.isEmpty(password)) {
+                Toast.makeText(Page_login.this, "Username dan Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            } else if (!validatePassword(password)) {
+                // Jika password tidak valid, tampilkan pesan
+                Toast.makeText(Page_login.this, "Password tidak memenuhi kriteria", Toast.LENGTH_SHORT).show();
+            } else {
+                // Jika validasi lolos, lakukan login
+                loginUser(usernameOrEmail, password);
             }
         });
     }
 
-    // Fungsi untuk login user
+    // Fungsi untuk validasi password
+    private boolean validatePassword(String password) {
+        if (password.length() >= 8) {
+            Pattern uppercase = Pattern.compile("[A-Z]");
+            Pattern lowercase = Pattern.compile("[a-z]");
+            Pattern digit = Pattern.compile("[0-9]");
+            Pattern symbol = Pattern.compile("[^a-zA-Z0-9]");
+
+            boolean hasUppercase = uppercase.matcher(password).find();
+            boolean hasLowercase = lowercase.matcher(password).find();
+            boolean hasDigit = digit.matcher(password).find();
+            boolean hasSymbol = symbol.matcher(password).find();
+
+            if (hasUppercase && hasLowercase && hasDigit && hasSymbol) {
+                textInputLayoutPassword.setHelperText("Your password is strong");
+                textInputLayoutPassword.setError(null);
+                return true;
+            } else {
+                textInputLayoutPassword.setError("Password must contain uppercase, lowercase, number, and symbol");
+                textInputLayoutPassword.setHelperText(null);
+                return false;
+            }
+        } else {
+            textInputLayoutPassword.setHelperText("Password must be at least 8 characters long");
+            textInputLayoutPassword.setError(null);
+            return false;
+        }
+    }
+
     // Fungsi untuk login user
     private void loginUser(String usernameOrEmail, String password) {
         String url = Config.BASE_URL + "login.php"; // Ganti dengan URL server PHP Anda
@@ -102,53 +141,34 @@ public class Page_login extends AppCompatActivity {
         // Membuat request POST dengan JsonObjectRequest
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
+                response -> {
+                    try {
+                        String status = response.getString("status");
 
-                            if (status.equals("success")) {
-                                int userId = response.getInt("user_id");
-                                String redirectTo = response.getString("redirect_to");
+                        if (status.equals("success")) {
+                            int userId = response.getInt("user_id");
+                            String redirectTo = response.getString("redirect_to");
 
-                                Toast.makeText(Page_login.this, "Login sukses", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Page_login.this, "Login sukses", Toast.LENGTH_SHORT).show();
 
-                                // Redirect ke halaman sesuai respon
-                                if (redirectTo.equals("main_activity")) {
-                                    // Jika ingin membuka Main Activity
-                                    Intent intent = new Intent(Page_login.this, Page_dashboard.class);
-//                                    intent.putExtra("user_id", userId);
-                                    startActivity(intent);
-                                    finish();
-                                }else {
-                                    // Jika ingin membuka ActivityDashboard dan langsung menampilkan Fragment Page_edit_akun
-                                    Intent intent = new Intent(Page_login.this, Page_dashboard.class);
-                                    intent.putExtra("user_id", userId);
-                                    startActivity(intent);
-                                    finish();
-                                }
+                            // Redirect ke halaman sesuai respon
+                            Intent intent = new Intent(Page_login.this, Page_dashboard.class);
+                            intent.putExtra("user_id", userId);
+                            startActivity(intent);
+                            finish();
 
-                            } else {
-                                String message = response.getString("message");
-                                Toast.makeText(Page_login.this, message, Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Page_login.this, "Error parsing JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            String message = response.getString("message");
+                            Toast.makeText(Page_login.this, message, Toast.LENGTH_SHORT).show();
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Page_login.this, "Error parsing JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Page_login.this, "Gagal terhubung ke server: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                error -> Toast.makeText(Page_login.this, "Gagal terhubung ke server: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
         requestQueue.add(jsonObjectRequest);
     }
-
-
 }

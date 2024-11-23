@@ -96,6 +96,7 @@
 
         <!-- EditText untuk Password -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TextInputLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Kata Sandi"
@@ -111,12 +112,14 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:inputType="textPassword"
+                android:typeface="serif"
                 android:padding="10dp"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- EditText untuk Konfirmasi Password -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confrimpass2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Konfirmasi Kata Sandi"

@@ -19,16 +19,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Page_register extends AppCompatActivity {
 
     private EditText editTextUsername, editTextEmail, editTextPassword, editTextConfirmPassword;
+    private TextInputLayout textInputLayoutPassword, textInputLayoutConfirmPassword;
     private Button buttonDaftar;
     private static final String REGISTER_URL = Config.BASE_URL + "register.php"; // Ganti dengan URL API Anda
 
@@ -38,39 +41,29 @@ public class Page_register extends AppCompatActivity {
         setContentView(R.layout.activity_main3);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        // Inisialisasi komponen UI
         ImageButton buttonBack = findViewById(R.id.backbutton);
         buttonDaftar = findViewById(R.id.btn_daftar);
         TextView textLogin = findViewById(R.id.login_text);
 
-        // Inisialisasi input
         editTextUsername = findViewById(R.id.textusername);
         editTextEmail = findViewById(R.id.textemail);
         editTextPassword = findViewById(R.id.textpass);
         editTextConfirmPassword = findViewById(R.id.textconfirmpass);
 
-        // Set OnClickListener untuk tombol back
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        textInputLayoutPassword = findViewById(R.id.TextInputLayout2);
+        textInputLayoutConfirmPassword = findViewById(R.id.confrimpass2);
 
-        // Set OnClickListener untuk tombol daftar
-        buttonDaftar.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        // Set listener untuk tombol back
+        buttonBack.setOnClickListener(v -> finish());
 
-        // Set OnClickListener untuk teks login
-        textLogin.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_register.this, Page_login.class);
-                startActivity(intent);
-            }
+        // Set listener untuk tombol daftar
+        buttonDaftar.setOnClickListener(v -> registerUser());
+
+        // Set listener untuk teks login
+        textLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(Page_register.this, Page_login.class);
+            startActivity(intent);
         });
     }
 
@@ -87,11 +80,18 @@ public class Page_register extends AppCompatActivity {
             return;
         }
 
-        // Validasi kesesuaian password
+        // Validasi password
+        if (!validatePassword(password)) {
+            return; // Jika password tidak valid, hentikan proses
+        }
+
+        // Validasi kesesuaian password dan konfirmasi password
         if (!password.equals(confirmPassword)) {
-            editTextConfirmPassword.setError("Konfirmasi password tidak sesuai");
-            editTextConfirmPassword.requestFocus();
+            textInputLayoutConfirmPassword.setError("Konfirmasi password tidak sesuai");
+            textInputLayoutConfirmPassword.requestFocus();
             return;
+        } else {
+            textInputLayoutConfirmPassword.setError(null);
         }
 
         // Membuat request ke server menggunakan Volley
@@ -122,7 +122,9 @@ public class Page_register extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Page_register.this, "Gagal menghubungi server", Toast.LENGTH_SHORT).show();
+                        // Tangani error di sini
+                        Log.e("VolleyError", error.toString());
+                        Toast.makeText(Page_register.this, "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
 
@@ -140,5 +142,34 @@ public class Page_register extends AppCompatActivity {
         // Menambahkan request ke dalam RequestQueue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    // Fungsi untuk validasi password
+    private boolean validatePassword(String password) {
+        if (password.length() >= 8) {
+            Pattern uppercase = Pattern.compile("[A-Z]");
+            Pattern lowercase = Pattern.compile("[a-z]");
+            Pattern digit = Pattern.compile("[0-9]");
+            Pattern symbol = Pattern.compile("[^a-zA-Z0-9]");
+
+            boolean hasUppercase = uppercase.matcher(password).find();
+            boolean hasLowercase = lowercase.matcher(password).find();
+            boolean hasDigit = digit.matcher(password).find();
+            boolean hasSymbol = symbol.matcher(password).find();
+
+            if (hasUppercase && hasLowercase && hasDigit && hasSymbol) {
+                textInputLayoutPassword.setHelperText("Password Anda kuat");
+                textInputLayoutPassword.setError(null);
+                return true;
+            } else {
+                textInputLayoutPassword.setError("Password harus mengandung huruf besar, huruf kecil, angka, dan simbol");
+                textInputLayoutPassword.setHelperText(null);
+                return false;
+            }
+        } else {
+            textInputLayoutPassword.setHelperText("Password minimal 8 karakter");
+            textInputLayoutPassword.setError(null);
+            return false;
+        }
     }
 }

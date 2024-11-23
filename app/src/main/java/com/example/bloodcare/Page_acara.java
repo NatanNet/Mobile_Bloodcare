@@ -32,8 +32,8 @@ public class Page_acara extends Fragment {
 
     private ListView listView;
     private ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
-    private String GET_URL = "http://192.168.1.125/website_bloodcare/api/mobile/get_dataAcara.php";
-    private String DELETE_URL = "http://192.168.1.125/website_bloodcare/api/mobile/delete_donor.php";
+    private String GET_URL = "http://192.168.1.94/website_bloodcare/api/mobile/get_dataAcara.php";
+    private String DELETE_URL = "http://192.168.1.94/website_bloodcare/api/mobile/delete_donor.php";
 
     @Nullable
     @Override
