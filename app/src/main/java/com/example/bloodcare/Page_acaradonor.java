@@ -127,9 +127,11 @@ public class Page_acaradonor extends AppCompatActivity {
                                     // Menampilkan Toast jika data berhasil disimpan
                                     Toast.makeText(Page_acaradonor.this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
 
-                                    // Setelah data disimpan, pindah ke Page_acaradonor2
+                                    // Setelah data disimpan, pindah ke Fragment 2 di DashboardActivity
                                     Intent intent = new Intent(Page_acaradonor.this, Page_acara.class);
+                                    intent.putExtra("target_fragment", 2); // Fragment 2
                                     startActivity(intent);
+                                    finish(); // Menutup Activity saat ini
                                 } else {
                                     Toast.makeText(Page_acaradonor.this, "Gagal menyimpan data", Toast.LENGTH_SHORT).show();
                                 }
@@ -151,7 +153,7 @@ public class Page_acaradonor extends AppCompatActivity {
                     params.put("lokasi", lokasiDonor);
                     params.put("fasilitas", fasilitas);
                     params.put("time_waktu", waktu);
-                    params.put("tgl_acara", formattedDate);  // Mengirimkan tanggal yang diformat
+                    params.put("tgl_acara", formattedDate); // Mengirimkan tanggal yang diformat
                     return params;
                 }
             };
