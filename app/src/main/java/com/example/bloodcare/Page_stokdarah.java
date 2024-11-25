@@ -18,7 +18,7 @@ public class Page_stokdarah extends AppCompatActivity {
 
         // Inisialisasi ImageView edit
         ImageView edit = findViewById(R.id.iconEditAplus);
-
+        ImageView edit2 = findViewById(R.id.iconEditAmin);
         // Tambahkan OnClickListener pada ImageView edit
         edit.setOnClickListener(new View.OnClickListener() {
             @Override

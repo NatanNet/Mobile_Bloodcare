@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -39,12 +46,10 @@
        
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginBottom="50dp">
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +70,10 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="textEmailAddress"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"/>
 
             <!-- Nama Lengkap Field -->
             <TextView
@@ -98,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="text"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:clickable="false"/>
 
             <!-- Tanggal Lahir Field -->
             <TextView
@@ -115,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="date"
-                android:padding="12dp" />
+                android:padding="12dp"
+                />
 
             <!-- Nomor Telepon Field -->
             <TextView
@@ -151,15 +161,19 @@
                 android:inputType="textPostalAddress"
                 android:padding="12dp" />
         </LinearLayout>
-    </ScrollView>
+</ScrollView>
+
 
     <Button
+        android:id="@+id/btnSimpanakun"
         android:layout_width="141dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="70dp"
         android:background="@drawable/rounded_button"
         android:text="Simpan"
         android:textColor="@color/white"/>
 
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.example.bloodcare;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog; // Import AlertDialog
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -110,6 +112,7 @@ public class Page_acara extends Fragment {
             HashMap<String, String> item = dataList.get(position);
             textNama.setText(item.get("lokasi"));
 
+            // Tombol Edit
             btnEdit.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), Page_acaradonor.class);
                 intent.putExtra("id_acara", item.get("id_acara"));
@@ -120,9 +123,20 @@ public class Page_acara extends Fragment {
                 startActivity(intent);
             });
 
+            // Tombol Delete
             btnDelete.setOnClickListener(v -> {
-                // Memanggil fungsi deleteData() dengan id acara
-                deleteData(item.get("id_acara"));
+                // Tampilkan pop-up konfirmasi sebelum menghapus
+                new AlertDialog.Builder(getContext())
+                        .setMessage("Apakah Anda yakin ingin menghapus acara ini?")
+                        .setCancelable(false)
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteData(item.get("id_acara")); // Panggil fungsi deleteData jika Ya
+                            }
+                        })
+                        .setNegativeButton("Tidak", null)
+                        .show();
             });
 
             return convertView;

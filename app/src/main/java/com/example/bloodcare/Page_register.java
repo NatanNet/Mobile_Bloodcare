@@ -33,7 +33,7 @@ public class Page_register extends AppCompatActivity {
     private EditText editTextUsername, editTextEmail, editTextPassword, editTextConfirmPassword;
     private TextInputLayout textInputLayoutPassword, textInputLayoutConfirmPassword;
     private Button buttonDaftar;
-    private static final String REGISTER_URL = Config.BASE_URL + "register.php"; // Ganti dengan URL API Anda
+    private static final String REGISTER_URL = "http://192.168.1.94/website_bloodcare/api/mobile/register.php";// Ganti dengan URL API Anda
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

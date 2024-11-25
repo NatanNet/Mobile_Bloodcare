@@ -117,7 +117,7 @@ public class Page_acaradonor extends AppCompatActivity {
             String formattedDate = outputFormat.format(date);
 
             // Kirim tanggal yang telah diformat ke server
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.1.94/website_bloodcare/api/mobile/tambah_acara.php",
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,Config.BASE_URL + "tambah_acara.php",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -128,7 +128,7 @@ public class Page_acaradonor extends AppCompatActivity {
                                     Toast.makeText(Page_acaradonor.this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
 
                                     // Setelah data disimpan, pindah ke Fragment 2 di DashboardActivity
-                                    Intent intent = new Intent(Page_acaradonor.this, Page_acara.class);
+                                    Intent intent = new Intent(Page_acaradonor.this, Page_dashboard.class);
                                     intent.putExtra("target_fragment", 2); // Fragment 2
                                     startActivity(intent);
                                     finish(); // Menutup Activity saat ini

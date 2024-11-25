@@ -16,8 +16,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,7 +24,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Page_login extends AppCompatActivity {
@@ -80,8 +77,8 @@ public class Page_login extends AppCompatActivity {
 
         // OnClickListener untuk login
         buttonLogin.setOnClickListener(v -> {
-            String usernameOrEmail = editUsername.getText().toString().trim();
-            String password = editPassword.getText().toString().trim();
+            String usernameOrEmail = editUsername.getText() != null ? editUsername.getText().toString().trim() : "";
+            String password = editPassword.getText() != null ? editPassword.getText().toString().trim() : "";
 
             // Validasi input username dan password
             if (TextUtils.isEmpty(usernameOrEmail) || TextUtils.isEmpty(password)) {
@@ -110,16 +107,16 @@ public class Page_login extends AppCompatActivity {
             boolean hasSymbol = symbol.matcher(password).find();
 
             if (hasUppercase && hasLowercase && hasDigit && hasSymbol) {
-                textInputLayoutPassword.setHelperText("Your password is strong");
+                textInputLayoutPassword.setHelperText("Password Anda kuat");
                 textInputLayoutPassword.setError(null);
                 return true;
             } else {
-                textInputLayoutPassword.setError("Password must contain uppercase, lowercase, number, and symbol");
+                textInputLayoutPassword.setError("Password harus mengandung huruf besar, huruf kecil, angka, dan simbol");
                 textInputLayoutPassword.setHelperText(null);
                 return false;
             }
         } else {
-            textInputLayoutPassword.setHelperText("Password must be at least 8 characters long");
+            textInputLayoutPassword.setHelperText("Password harus maksimal 8 karakter");
             textInputLayoutPassword.setError(null);
             return false;
         }
@@ -147,13 +144,22 @@ public class Page_login extends AppCompatActivity {
 
                         if (status.equals("success")) {
                             int userId = response.getInt("user_id");
+                            String username = response.getString("username"); // Pastikan server mengembalikan username
+                            String email = response.getString("email"); // Pastikan server mengembalikan email
                             String redirectTo = response.getString("redirect_to");
 
                             Toast.makeText(Page_login.this, "Login sukses", Toast.LENGTH_SHORT).show();
 
-                            // Redirect ke halaman sesuai respon
                             Intent intent = new Intent(Page_login.this, Page_dashboard.class);
                             intent.putExtra("user_id", userId);
+                            intent.putExtra("username_or_email", username != null ? username : email);
+                            if (redirectTo.equals("main_activity")) {
+                                // Jika data lengkap, tidak menambahkan target_fragment
+                            } else if (redirectTo.equals("page_editprofil")) {
+                                // Jika data tidak lengkap, arahkan ke fragment Page_detail_akun
+                                intent.putExtra("user_id", 1); // Target fragment untuk Page_detail_akun
+                            }
+
                             startActivity(intent);
                             finish();
 
