@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class Page_detail_akun extends Fragment {
 
-    private String GET_URL = "http://192.168.1.94/website_bloodcare/api/mobile/akun_detail.php";
+    private String GET_URL = Config.BASE_URL + "akun_detail.php";
     private EditText editTextEmail, editTextUsername, editTextNamaLengkap, editTextTanggalLahir, editTextNoHp, editTextAlamat;
 
     public Page_detail_akun() {

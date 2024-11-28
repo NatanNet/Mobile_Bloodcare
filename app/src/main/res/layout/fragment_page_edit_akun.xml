@@ -89,7 +89,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"/>
+
 
             <!-- Nama Pengguna Field -->
             <TextView
@@ -107,7 +111,7 @@
                 android:background="@drawable/edit_text_background"
                 android:inputType="text"
                 android:padding="12dp"
-                android:clickable="false"/>
+                />
 
             <!-- Tanggal Lahir Field -->
             <TextView
@@ -125,7 +129,9 @@
                 android:background="@drawable/edit_text_background"
                 android:inputType="date"
                 android:padding="12dp"
-                />
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"/>
 
             <!-- Nomor Telepon Field -->
             <TextView
@@ -142,7 +148,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="phone"
-                android:padding="12dp" />
+                android:padding="12dp"
+                />
 
             <!-- Alamat Field -->
             <TextView
@@ -159,7 +166,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="textPostalAddress"
-                android:padding="12dp" />
+                android:padding="12dp"
+                />
         </LinearLayout>
 </ScrollView>
 

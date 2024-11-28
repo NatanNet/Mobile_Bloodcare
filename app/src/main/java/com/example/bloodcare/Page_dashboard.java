@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class Page_dashboard extends AppCompatActivity {
+public class  Page_dashboard extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
@@ -19,145 +19,131 @@ public class Page_dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        // Ambil intent dari user_id dan target_fragment
-        int userId = getIntent().getIntExtra("user_id", -1); // Default -1 jika tidak ada
-        int targetFragment = getIntent().getIntExtra("target_fragment", -1); // Default -1 jika tidak ada
-
-        // Tambahkan log untuk memeriksa nilai target_fragment
-        android.util.Log.d("Page_dashboard", "Received target_fragment: " + targetFragment);
+        // Ambil data dari Intent
+        int userId = getIntent().getIntExtra("user_id", -1);
+        int targetFragment = getIntent().getIntExtra("target_fragment", -1);
+        String usernameOrEmail = getIntent().getStringExtra("username_or_email"); // Ambil username_or_email
 
         // Tentukan fragment awal berdasarkan intent
         if (savedInstanceState == null) {
             if (targetFragment == 2) {
-                // Jika target_fragment valid, buka Page_acara
-                navigateToTargetFragment(targetFragment);
+                navigateToTargetFragment(targetFragment);  // Navigasi ke Page_acara
             } else if (userId == 1) {
-                // Jika userId = 1, buka Page_detail_akun
-                openDetailAkunFragment(userId);
+                openDetailAkunFragment(userId, usernameOrEmail);  // Buka Page_detail_akun untuk userId == 1
             } else {
-                // Jika target_fragment tidak ada atau tidak lengkap, buka Page_beranda
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, new Page_beranda())
-                        .commit();
+                loadFragment(new Page_beranda());  // Buka Page_beranda jika kondisi lain
             }
         }
 
-        // Atur listener untuk navigasi BottomNavigationView
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
-                if (item.getItemId() == R.id.navigation_home) {
-                    selectedFragment = new Page_beranda();
-                } else if (item.getItemId() == R.id.navigation_acara) {
-                    selectedFragment = new Page_acara();
-                } else if (item.getItemId() == R.id.navigation_akun) {
-                    selectedFragment = new Page_akun();
-                }
+        // Inisialisasi BottomNavigationView
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, selectedFragment)
-                            .addToBackStack(null) // Add to back stack for proper back navigation
-                            .commit();
-                    return true;
-                }
-                return false;
-            }
-        });
+        // Bottom Navigation Item Select Listener
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    // Handle item yang dipilih di BottomNavigationView
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment selectedFragment = null;
+
+        // Tentukan fragment berdasarkan item yang dipilih
+        if (item.getItemId() == R.id.navigation_home) {
+            selectedFragment = new Page_beranda();
+        } else if (item.getItemId() == R.id.navigation_acara) {
+            selectedFragment = new Page_acara();
+        } else if (item.getItemId() == R.id.navigation_akun) {
+            selectedFragment = new Page_akun();
+        }
+
+        // Ganti fragment jika fragment yang dipilih valid
+        if (selectedFragment != null) {
+            loadFragment(selectedFragment);
+        }
+
+        return true;
+    }
+
+    // Fungsi untuk mengganti fragment di frameLayout
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, fragment)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Dapatkan fragment saat ini
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+
+        if (currentFragment instanceof Page_acara || currentFragment instanceof Page_akun) {
+            // Jika berada di fragment selain beranda, kembali ke Page_beranda
+            loadFragment(new Page_beranda());
+
+            // Update BottomNavigationView untuk memilih item navigation_acara
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        } else if (currentFragment instanceof Page_beranda) {
+            // Jika berada di fragment beranda, keluar aplikasi
+            super.onBackPressed();
+        } else {
+            // Jika fragment lainnya (misalnya DetailAkun), kembali ke Page_acara
+            loadFragment(new Page_beranda());
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        }
     }
 
     // Fungsi untuk membuka fragment Page_detail_akun
-    private void openDetailAkunFragment(int userId) {
-        Fragment detailAkunFragment = new Page_detail_akun();
-
-        // Ambil data dari intent
-        String usernameOrEmail = getIntent().getStringExtra("username_or_email");
-
-        // Periksa jika usernameOrEmail tidak null atau kosong
+    private void openDetailAkunFragment(int userId, String usernameOrEmail) {
         if (usernameOrEmail != null && !usernameOrEmail.isEmpty()) {
+            Fragment detailAkunFragment = new Page_detail_akun();
+
             Bundle bundle = new Bundle();
             bundle.putInt("user_id", userId);
-            bundle.putString("username_or_email", usernameOrEmail);  // Passing the single value (username or email)
-
-            detailAkunFragment.setArguments(bundle);
-
-            // Gantikan fragment di frameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameLayout, detailAkunFragment)
-                    .addToBackStack(null) // Add to back stack for proper back navigation
-                    .commit();
-
-            // Perbarui item yang dipilih di BottomNavigationView (jika perlu)
-            bottomNavigationView.setSelectedItemId(R.id.navigation_akun);
-        } else {
-            // Jika tidak ada data, tampilkan pesan error atau lakukan penanganan lain
-            Toast.makeText(this, "Data username atau email tidak ditemukan", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    // Fungsi untuk membuka fragment Page_akun
-    private void open_akun(int userId) {
-        Fragment detailAkunFragment = new Page_akun();
-
-        // Ambil data dari Intent
-        String usernameOrEmail = getIntent().getStringExtra("username_or_email");
-
-        // Periksa jika usernameOrEmail tidak null atau kosong
-        if (usernameOrEmail != null && !usernameOrEmail.isEmpty()) {
-            Bundle bundle = new Bundle();
             bundle.putString("username_or_email", usernameOrEmail);
             detailAkunFragment.setArguments(bundle);
 
             // Gantikan fragment di frameLayout
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frameLayout, detailAkunFragment)
-                    .addToBackStack(null) // Add to back stack for proper back navigation
+                    .addToBackStack(null) // Menambahkan ke back stack agar back button berfungsi dengan benar
+                    .commit();
+
+            // Perbarui item yang dipilih di BottomNavigationView
+            bottomNavigationView.setSelectedItemId(R.id.navigation_akun);
+        } else {
+            // Tampilkan pesan error jika data tidak ditemukan
+            Toast.makeText(this, "Data username atau email tidak ditemukan", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Fungsi untuk membuka fragment Page_akun
+    private void open_akun(int userId) {
+        Fragment akunFragment = new Page_akun();
+
+        // Ambil data dari Intent
+        String usernameOrEmail = getIntent().getStringExtra("username_or_email");
+
+        // Periksa apakah data usernameOrEmail ada
+        if (usernameOrEmail != null && !usernameOrEmail.isEmpty()) {
+            Bundle bundle = new Bundle();
+            bundle.putString("username_or_email", usernameOrEmail);
+            akunFragment.setArguments(bundle);
+
+            // Gantikan fragment di frameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout, akunFragment)
+                    .addToBackStack(null)
                     .commit();
         } else {
-            // Jika tidak ada data, tampilkan pesan error atau lakukan penanganan lain
+            // Tampilkan pesan error jika data tidak ditemukan
             Toast.makeText(this, "Data username_or_email tidak ditemukan", Toast.LENGTH_SHORT).show();
         }
     }
 
     // Fungsi untuk navigasi ke target_fragment berdasarkan intent
     private void navigateToTargetFragment(int targetFragment) {
-        Fragment selectedFragment = null;
-
-        // Tentukan fragment berdasarkan targetFragment
-        if (targetFragment == 2) { // 2 mengacu pada Page_acara
-            selectedFragment = new Page_acara();
-        }
-
-        if (selectedFragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameLayout, selectedFragment)
-                    .addToBackStack(null) // Add to back stack for proper back navigation
-                    .commit();
-
-            // Perbarui item yang dipilih di BottomNavigationView
-            if (targetFragment == 2) {
-                bottomNavigationView.setSelectedItemId(R.id.navigation_acara);
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-
-        if (currentFragment instanceof Page_acara || currentFragment instanceof Page_akun) {
-            // Kembali ke beranda jika bukan di beranda
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameLayout, new Page_beranda())
-                    .commit();
-            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        } else {
-            // Keluar jika sudah di beranda
-            super.onBackPressed();
+        if (targetFragment == 2) {
+            loadFragment(new Page_acara());
+            bottomNavigationView.setSelectedItemId(R.id.navigation_acara);  // Perbarui item yang dipilih
         }
     }
 }

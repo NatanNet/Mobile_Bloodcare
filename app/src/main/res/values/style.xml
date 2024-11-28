@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema kustom untuk DatePickerDialog -->
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Mengubah warna tombol -->
+        <item name="colorPrimary">@color/merahpmi</item> <!-- Merah untuk tombol utama -->
+        <item name="colorAccent">@color/merahpmi</item> <!-- Merah untuk aksen (seperti tombol lainnya) -->
+
+        <!-- Menyesuaikan warna teks -->
+        <item name="android:textColorPrimary">@color/black</item> <!-- Putih untuk teks -->
+        <item name="android:textColorSecondary">#000000</item> <!-- Putih untuk teks sekunder -->
+
+        <!-- Mengubah warna latar belakang dialog -->
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+</resources>

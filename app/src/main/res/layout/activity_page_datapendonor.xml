@@ -1,22 +1,30 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    android:padding="16dp">
+    android:orientation="vertical"
+    >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/main">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/custom_background"
+
         android:padding="16dp">
 
         <!-- Nama Pendonor -->
+
         <ImageButton
             android:id="@+id/btnkembali"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/back" />
@@ -30,11 +38,28 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
+            android:id="@+id/nama1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nama Pendonor"
             android:background="@drawable/custom_edit_text_background"
             android:padding="8dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alamat"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/alamat1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_edit_text_background"
+            android:padding="8dp"
+            android:hint="alamat"
             android:layout_marginBottom="16dp" />
 
         <!-- Lokasi Donor -->
@@ -46,6 +71,7 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
+            android:id="@+id/lokasi1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Lokasi donor"
@@ -57,14 +83,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No HP/e-mail"
+            android:text="No HP"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
 
         <EditText
+            android:id="@+id/nomerhp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="No.HP/e-mail"
+            android:hint="No.hp"
             android:background="@drawable/custom_edit_text_background"
             android:padding="8dp"
             android:layout_marginBottom="16dp" />
@@ -73,7 +100,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tinggi badan/berat badan"
+            android:text="Berat badan/golongan darah"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
 
@@ -84,24 +111,12 @@
             android:layout_marginBottom="16dp">
 
             <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="tinggi"
-                android:background="@drawable/custom_edit_text_background"
-                android:padding="8dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="cm"
-                android:padding="8dp" />
-
-            <EditText
+                android:id="@+id/berat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="berat"
+                android:inputType="number"
                 android:background="@drawable/custom_edit_text_background"
                 android:padding="8dp" />
 
@@ -111,23 +126,19 @@
                 android:text="kg"
                 android:padding="8dp" />
 
+            <EditText
+                android:id="@+id/goldar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="golongan darah"
+                android:inputType="number"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp" />
+
         </LinearLayout>
 
-        <!-- Golongan darah -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Golongan darah"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Golongan darah"
-            android:background="@drawable/custom_edit_text_background"
-            android:padding="8dp"
-            android:layout_marginBottom="16dp" />
 
         <!-- Jumlah kantong darah -->
         <TextView
@@ -137,15 +148,15 @@
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
 
+        <!-- Tekanan darah -->
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="kantong"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/custom_edit_text_background"
-            android:padding="8dp"
-            android:layout_marginBottom="16dp" />
+            android:hint="kantong"
+            android:padding="8dp" />
 
-        <!-- Tekanan darah -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -154,30 +165,41 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
+            android:id="@+id/tekanan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_edit_text_background"
             android:padding="8dp"
+            android:hint="tekanan darah"
             android:layout_marginBottom="16dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rhesus"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/resus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:background="@drawable/custom_edit_text_background"
-            android:padding="4dp"
-            android:gravity="center_vertical">
-
-        </LinearLayout>
+            android:padding="8dp"
+            android:hint="rhesus"
+            android:layout_marginBottom="16dp" />
 
         <!-- Tombol simpan -->
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="simpan"
-            android:backgroundTint="#D52D2D"
+            android:layout_marginTop="60dp"
+            android:backgroundTint="@color/merahpmi"
             android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"
             android:padding="12dp" />
     </LinearLayout>
-</ScrollView>
+</LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

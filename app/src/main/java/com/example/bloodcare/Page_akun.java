@@ -18,6 +18,8 @@ import androidx.appcompat.app.AlertDialog; // Import AlertDialog
 
 public class Page_akun extends Fragment {
 
+    private SharedPreferencess sharedPreferences; // Tambahkan SharedPreferencess untuk logout
+
     public Page_akun() {
         // Required empty public constructor
     }
@@ -28,11 +30,15 @@ public class Page_akun extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_dashboard3, container, false);
 
+        // Inisialisasi SharedPreferencess untuk logout
+        sharedPreferences = new SharedPreferencess(getActivity()); // Gunakan getActivity() untuk konteks di fragment
+
         // Inisialisasi tombol
         Button buttonNavigate = view.findViewById(R.id.btneditpp); // Tombol untuk pindah ke Page_detail_akun
         ImageView buttonBack = view.findViewById(R.id.keluar); // Tombol untuk logout
         ImageView imageViewGoToOTP = view.findViewById(R.id.gantipss); // ImageView untuk menuju ke Page_otpsend
-        ImageView imageViewGoogle = view.findViewById(R.id.tentangkami1);// ImageView untuk membuka Google atau URL lain
+        ImageView imageViewGoogle = view.findViewById(R.id.tentangkami1); // ImageView untuk membuka Google atau URL lain
+        ImageView imageViewPusatBantuan = view.findViewById(R.id.bantuan1); // Tombol pusat bantuan
 
         // Listener untuk buttonNavigate
         buttonNavigate.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +64,10 @@ public class Page_akun extends Fragment {
                         .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Jika memilih "Ya", buka Page_login menggunakan Intent
+                                // Jika memilih "Ya", lakukan logout dengan SharedPreferencess
+                                sharedPreferences.logout();
+
+                                // Setelah logout, buka Page_login menggunakan Intent
                                 Intent intent = new Intent(getActivity(), Page_login.class);
                                 startActivity(intent);
 
@@ -89,6 +98,20 @@ public class Page_akun extends Fragment {
                 Uri googleUri = Uri.parse("https://bloodcare.my.id/website_bloodcare/website/public_html/");  // Ganti URL sesuai kebutuhan
                 Intent intent = new Intent(Intent.ACTION_VIEW, googleUri);
                 startActivity(intent);  // Membuka URL di browser
+            }
+        });
+
+        // Listener untuk pusat bantuan (untuk membuka WhatsApp)
+        imageViewPusatBantuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Ganti nomor dengan nomor WhatsApp tujuan
+                String phoneNumber = "+6282142141480"; // Ganti dengan nomor WhatsApp yang diinginkan
+                String message = "Halo, saya membutuhkan bantuan.";
+
+                // Membuka WhatsApp dengan nomor dan pesan tertentu
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/" + phoneNumber + "?text=" + Uri.encode(message)));
+                startActivity(intent);
             }
         });
 

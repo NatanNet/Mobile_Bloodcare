@@ -1,16 +1,16 @@
 package com.example.bloodcare;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -19,12 +19,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Page_datapendonor2 extends AppCompatActivity {
 
     private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> donorList;
+    private DonorAdapter adapter;
+    private ArrayList<HashMap<String, String>> donorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,52 +34,78 @@ public class Page_datapendonor2 extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         donorList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, donorList);
+        adapter = new DonorAdapter(this, donorList);
         listView.setAdapter(adapter);
 
+        ImageButton buttonBack = findViewById(R.id.imageButton4);
+        buttonBack.setOnClickListener(v -> finish());
+
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setQueryHint("Cari nama pendonor");
+
         fetchDonorData();
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            // Ambil data dari item yang diklik
+            HashMap<String, String> selectedDonor = donorList.get(position);
+
+            // Intent untuk membuka Page_datapendonor
+            Intent intent = new Intent(Page_datapendonor2.this, Page_datapendonor.class);
+            intent.putExtra("nama", selectedDonor.get("nama"));
+            intent.putExtra("nohp", selectedDonor.get("nohp"));
+            intent.putExtra("lokasi_donor", selectedDonor.get("lokasi_donor"));
+            intent.putExtra("goldar", selectedDonor.get("goldar"));
+            intent.putExtra("tb", selectedDonor.get("tb"));
+            intent.putExtra("bb", selectedDonor.get("bb"));
+            intent.putExtra("alamat", selectedDonor.get("alamat"));
+
+
+            startActivity(intent);
+        });
     }
 
     private void fetchDonorData() {
-        String url = Config.BASE_URL + "get_pendonor.php"; // Ganti dengan URL server PHP Anda
+        String url = Config.BASE_URL + "get_pendonor.php";
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            if (response.getString("status").equals("success")) {
-                                JSONArray dataArray = response.getJSONArray("data");
-                                donorList.clear();
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray dataArray = response.getJSONArray("data");
+                            donorList.clear();
 
-                                for (int i = 0; i < dataArray.length(); i++) {
-                                    JSONObject dataObj = dataArray.getJSONObject(i);
-                                    String namaPendonor = dataObj.getString("nama_pendonor");
-                                    String goldar = dataObj.getString("goldar");
-                                    String rhesus = dataObj.getString("rhesus");
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject dataObj = dataArray.getJSONObject(i);
 
-                                    // Format data untuk ditampilkan
-                                    String formattedData = "Nama: " + namaPendonor + "\nGolongan Darah: " + goldar + " " + rhesus;
-                                    donorList.add(formattedData);
-                                }
+                                HashMap<String, String> donorData = new HashMap<>();
+                                donorData.put("nama", dataObj.getString("nama_pendonor"));
+                                donorData.put("nohp", dataObj.optString("no_telp"));
+                                donorData.put("lokasi_donor", dataObj.getString("lokasi_donor"));
+                                donorData.put("status", dataObj.getString("status"));
+                                donorData.put("goldar", dataObj.optString("goldar"));
+                                donorData.put("bb", dataObj.optString("berat_badan"));
+                                donorData.put("alamat", dataObj.optString("alamat"));
 
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
+
+
+                                donorList.add(donorData);
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(Page_datapendonor2.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Page_datapendonor2.this, "Error parsing data", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                String errorMessage = error.getMessage();
-                Toast.makeText(Page_datapendonor2.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
-            }
-        });
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(Page_datapendonor2.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+        );
 
         queue.add(jsonObjectRequest);
     }

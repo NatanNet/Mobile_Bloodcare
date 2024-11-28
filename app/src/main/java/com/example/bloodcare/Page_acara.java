@@ -34,8 +34,8 @@ public class Page_acara extends Fragment {
 
     private ListView listView;
     private ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
-    private String GET_URL = "http://192.168.1.94/website_bloodcare/api/mobile/get_dataAcara.php";
-    private String DELETE_URL = "http://192.168.1.94/website_bloodcare/api/mobile/delete_donor.php";
+    private String GET_URL = Config.BASE_URL + "get_dataAcara.php";
+    private String DELETE_URL = Config.BASE_URL+ "delete_donor.php";
 
     @Nullable
     @Override
@@ -110,7 +110,15 @@ public class Page_acara extends Fragment {
             ImageButton btnDelete = convertView.findViewById(R.id.btnDelete); // Tombol hapus ditambahkan
 
             HashMap<String, String> item = dataList.get(position);
-            textNama.setText(item.get("lokasi"));
+
+            // Mengambil data dari HashMap
+            String lokasi = item.get("lokasi");
+            String fasilitas = item.get("fasilitas");
+            String waktu = item.get("time_waktu");
+            String tanggal = item.get("tgl_acara");
+
+            textNama.setText("Lokasi: " + lokasi + "\nFasilitas: " + fasilitas + "\ntime_Waktu: " + waktu + "\ntgl_acara: " + tanggal);
+
 
             // Tombol Edit
             btnEdit.setOnClickListener(v -> {

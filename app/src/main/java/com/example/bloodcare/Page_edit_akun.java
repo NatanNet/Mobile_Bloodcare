@@ -1,6 +1,7 @@
 package com.example.bloodcare;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -30,8 +29,9 @@ import java.util.Map;
 public class Page_edit_akun extends Fragment {
 
     private EditText editTextEmail, editTextUsername, editTextNamaLengkap, editTextTanggalLahir, editTextNoHp, editTextAlamat;
-    private final String GET_URL = "http://192.168.1.94/website_bloodcare/api/mobile/akun_detail.php";
-    private final String UPDATE_URL = "http://192.168.1.94/website_bloodcare/api/mobile/edit_akun.php"; // URL untuk update data
+    private final String GET_URL = Config.BASE_URL + "akun_detail.php";
+    private final String UPDATE_URL = Config.BASE_URL + "edit_akun.php"; // URL untuk update data
+    private String oldUsername; // Variabel untuk menyimpan username lama
 
     public Page_edit_akun() {
         // Required empty public constructor
@@ -51,9 +51,9 @@ public class Page_edit_akun extends Fragment {
 
         // Ambil data dari arguments
         if (getArguments() != null) {
-            String usernameOrEmail = getArguments().getString("username_or_email", "");
-            if (!usernameOrEmail.isEmpty()) {
-                loadDataAkun(usernameOrEmail);
+            oldUsername = getArguments().getString("username_or_email", "");
+            if (!oldUsername.isEmpty()) {
+                loadDataAkun(oldUsername);
             }
         }
 
@@ -68,12 +68,16 @@ public class Page_edit_akun extends Fragment {
 
         // Listener untuk tombol simpan akun
         Button simpanButton = view.findViewById(R.id.btnSimpanakun);
-        simpanButton.setOnClickListener(v -> saveDataAkun());
-
+        simpanButton.setOnClickListener(v -> {
+            if (oldUsername == null || oldUsername.isEmpty()) {
+                Toast.makeText(getContext(), "Username lama tidak ditemukan", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            saveDataAkun(oldUsername);
+        });
 
         return view;
     }
-
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
@@ -100,41 +104,12 @@ public class Page_edit_akun extends Fragment {
                             JSONObject data = response.getJSONObject("data");
 
                             // Ambil data dari response JSON dan set ke EditText
-                            String email = data.optString("email", "");
-                            String namaLengkap = data.optString("nama_lengkap", "");
-                            String tanggalLahir = data.optString("tanggal_lahir", "");
-
                             editTextEmail.setText(data.optString("email", ""));
                             editTextUsername.setText(data.optString("username", ""));
                             editTextNamaLengkap.setText(data.optString("nama_lengkap", ""));
                             editTextTanggalLahir.setText(data.optString("tanggal_lahir", "0000-00-00"));
                             editTextNoHp.setText(data.optString("no_hp", ""));
                             editTextAlamat.setText(data.optString("alamat", ""));
-
-                            // Jika email, nama lengkap, atau tanggal lahir kosong, maka EditText bisa diklik dan diubah
-                            if (email.isEmpty()) {
-                                editTextEmail.setEnabled(true);
-                                editTextEmail.setFocusable(true);
-                            } else {
-                                editTextEmail.setEnabled(false);
-                                editTextEmail.setFocusable(false);
-                            }
-
-                            if (namaLengkap.isEmpty()) {
-                                editTextNamaLengkap.setEnabled(true);
-                                editTextNamaLengkap.setFocusable(true);
-                            } else {
-                                editTextNamaLengkap.setEnabled(false);
-                                editTextNamaLengkap.setFocusable(false);
-                            }
-
-                            if (tanggalLahir.isEmpty()) {
-                                editTextTanggalLahir.setEnabled(true);
-                                editTextTanggalLahir.setFocusable(true);
-                            } else {
-                                editTextTanggalLahir.setEnabled(false);
-                                editTextTanggalLahir.setFocusable(false);
-                            }
                         } else {
                             Toast.makeText(getContext(), "Gagal memuat data: " + response.optString("message", ""), Toast.LENGTH_SHORT).show();
                         }
@@ -148,15 +123,14 @@ public class Page_edit_akun extends Fragment {
         requestQueue.add(jsonObjectRequest);
     }
 
-
-    private void saveDataAkun() {
-        String username = editTextUsername.getText().toString().trim(); // username baru
+    private void saveDataAkun(String oldUsername) {
+        String usernameBaru = editTextUsername.getText().toString().trim();
         String noTelepon = editTextNoHp.getText().toString().trim();
         String alamat = editTextAlamat.getText().toString().trim();
-        String namalengkap = editTextNamaLengkap.getText().toString().trim();
+        String namaLengkap = editTextNamaLengkap.getText().toString().trim();
         String tanggalLahir = editTextTanggalLahir.getText().toString().trim();
 
-        if (username.isEmpty() || noTelepon.isEmpty() || alamat.isEmpty() || tanggalLahir.isEmpty()) {
+        if (usernameBaru.isEmpty() || noTelepon.isEmpty() || alamat.isEmpty() || namaLengkap.isEmpty() || tanggalLahir.isEmpty()) {
             Toast.makeText(getContext(), "Harap lengkapi semua data", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -167,13 +141,20 @@ public class Page_edit_akun extends Fragment {
                         JSONObject jsonResponse = new JSONObject(response);
                         if (jsonResponse.getBoolean("success")) {
                             Toast.makeText(getContext(), "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.frameLayout, new Page_detail_akun());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
+
+                            // Kirim intent ke Page_dashboard activity
+                            Intent intent = new Intent(getContext(), Page_dashboard.class);
+                            intent.putExtra("username_or_email", usernameBaru); // Mengirimkan username baru
+
+                            // Start the activity
+                            startActivity(intent);
+
+                            // Optionally, you can finish the current fragment/fragment activity if you want to close it
+                            getActivity().finish();
                         } else {
                             Toast.makeText(getContext(), "Gagal memperbarui data: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
                         }
+
                     } catch (JSONException e) {
                         Toast.makeText(getContext(), "Kesalahan parsing respons: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -182,10 +163,11 @@ public class Page_edit_akun extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("username_baru", username); // Mengirim username yang baru
+                params.put("username", oldUsername);
+                params.put("username_baru", usernameBaru);
                 params.put("no_telepon", noTelepon);
                 params.put("alamat", alamat);
-                params.put("nama_lengkap", namalengkap);
+                params.put("nama_lengkap", namaLengkap);
                 params.put("tanggal_lahir", tanggalLahir);
                 return params;
             }
@@ -194,4 +176,5 @@ public class Page_edit_akun extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
+
 }

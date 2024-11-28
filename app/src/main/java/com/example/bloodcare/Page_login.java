@@ -33,6 +33,8 @@ public class Page_login extends AppCompatActivity {
     private Button buttonLogin;
     private TextView register, forgotPass;
 
+    private SharedPreferencess sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,22 @@ public class Page_login extends AppCompatActivity {
 
         // Set layout activity
         setContentView(R.layout.activity_main2);
+
+        // Inisialisasi SharedPreferences
+        sharedPreferences = new SharedPreferencess(this);
+
+        // Cek jika sudah login sebelumnya
+        if (sharedPreferences.isLoggedIn()) {
+            // Jika sudah login, langsung menuju halaman dashboard
+            int userId = sharedPreferences.getUserId();
+            String usernameOrEmail = sharedPreferences.getUsernameOrEmail();
+
+            Intent intent = new Intent(Page_login.this, Page_dashboard.class);
+            intent.putExtra("user_id", userId);
+            intent.putExtra("username_or_email", usernameOrEmail);
+            startActivity(intent);
+            finish();
+        }
 
         // Inisialisasi UI
         editUsername = findViewById(R.id.textusername);
@@ -147,6 +165,11 @@ public class Page_login extends AppCompatActivity {
                             String username = response.getString("username"); // Pastikan server mengembalikan username
                             String email = response.getString("email"); // Pastikan server mengembalikan email
                             String redirectTo = response.getString("redirect_to");
+
+                            // Simpan status login di SharedPreferences
+                            sharedPreferences.saveLoginStatus(true);
+                            sharedPreferences.saveUserId(userId);
+                            sharedPreferences.saveUsernameOrEmail(username != null ? username : email);
 
                             Toast.makeText(Page_login.this, "Login sukses", Toast.LENGTH_SHORT).show();
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -17,6 +18,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Page_laporan extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +34,11 @@ public class Page_laporan extends AppCompatActivity {
         setContentView(R.layout.activity_page_laporan);
 
         ImageView iconLaporan = findViewById(R.id.iconLaporan);
+        ImageButton buttonBack = findViewById(R.id.icback3);
+
+
+        // Set listener untuk tombol back
+        buttonBack.setOnClickListener(v -> finish());
 
         iconLaporan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,105 +80,48 @@ public class Page_laporan extends AppCompatActivity {
             }
         });
 
+        // Panggil metode fetchLaporanData() untuk mengambil data laporan
+        fetchLaporanData();
+    }
 
-        //Iki digae memasukkan id setiap text view nama
-        // Tambahkan setelah iconLaporan.setOnClickListener
-        //iki id setiap lihat
-        TextView tvLihatNatan = findViewById(R.id.tvLihatNatan);
-        TextView LihatAmar = findViewById(R.id.LihatAmar);
-        TextView LihatGita = findViewById(R.id.LihatGita);
-        TextView LihatApril = findViewById(R.id.LihatApril);
-        TextView LihatSasa = findViewById(R.id.LihatSasa);
-        TextView LihatAzkai = findViewById(R.id.LihatAzkai);
+    private void fetchLaporanData() {
+        String url = Config.BASE_URL + "get_laporan.php"; // Ganti dengan URL API Anda
+        RequestQueue queue = Volley.newRequestQueue(this);
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if ("success".equals(response.getString("status"))) {
+                            JSONArray dataArray = response.getJSONArray("data");
+                            StringBuilder laporanBuilder = new StringBuilder();
 
-        //kode iki gae ben nama dan lihat iso diklik boy
-        tvLihatNatan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject obj = dataArray.getJSONObject(i);
+                                laporanBuilder.append("Nama: ").append(obj.getString("nama_pendonor"))
+                                        .append("\nLokasi: ").append(obj.getString("lokasi_donor"))
+                                        .append("\nHP/Email: ").append(obj.getString("hp_email"))
+                                        .append("\nBerat Badan: ").append(obj.getDouble("berat_badan"))
+                                        .append("\nGolongan Darah: ").append(obj.getString("goldar"))
+                                        .append("\nTekanan Darah: ").append(obj.getString("tekanan_darah"))
+                                        .append("\nRhesus: ").append(obj.getString("rhesus"))
+                                        .append("\n\n");
 
-        // Atur OnClickListener untuk register TextView
-        LihatAmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
+                            }
 
-        LihatGita.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
+                            Toast.makeText(this, laporanBuilder.toString(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, "Gagal mengambil data", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error parsing data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show());
 
-        LihatApril.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
-
-        LihatSasa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
-
-        LihatAzkai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
-                startActivity(intent);
-            }
-        });
+        queue.add(jsonObjectRequest);
     }
 }
-/*
 
-        LihatAmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "Lihat Amar dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        LihatGita.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "Lihat Gita dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        LihatApril.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "Lihat April dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        LihatSasa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "lihat Sasa dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        LihatAzkai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(Page_laporan.this, "Lihat Azkai dipilih", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-}
-*/

@@ -3,6 +3,7 @@ package com.example.bloodcare;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +20,13 @@ public class Page_stokdarah extends AppCompatActivity {
         // Inisialisasi ImageView edit
         ImageView edit = findViewById(R.id.iconEditAplus);
         ImageView edit2 = findViewById(R.id.iconEditAmin);
+        ImageButton buttonback1 = findViewById(R.id.icback2);
+
+
+
+        // Tombol kembali
+        buttonback1.setOnClickListener(v -> finish());
+
         // Tambahkan OnClickListener pada ImageView edit
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,6 +34,8 @@ public class Page_stokdarah extends AppCompatActivity {
                 // Navigasi ke Page_acaradonor2
                 Intent intent = new Intent(Page_stokdarah.this, Page_stokdarah2.class);
                 startActivity(intent);
+
+
             }
         });
     }

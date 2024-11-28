@@ -78,6 +78,7 @@ public class Page_acaradonor extends AppCompatActivity {
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(
                     Page_acaradonor.this,
+                    R.style.DatePickerDialogTheme, // Menggunakan tema kustom
                     new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -100,6 +101,7 @@ public class Page_acaradonor extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 Page_acaradonor.this,
+                R.style.DatePickerDialogTheme, // Menggunakan tema kustom
                 (view, selectedYear, selectedMonth, selectedDay) ->
                         etDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear),
                 year, month, day

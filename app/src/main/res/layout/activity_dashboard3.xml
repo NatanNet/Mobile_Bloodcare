@@ -5,15 +5,6 @@
     android:padding="16dp"
     android:layout_gravity="center">
 
-    <!-- Back Button -->
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/back"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back Button" />
 
     <!-- Profile Section -->
     <LinearLayout
@@ -162,6 +153,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/bantuan1"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"

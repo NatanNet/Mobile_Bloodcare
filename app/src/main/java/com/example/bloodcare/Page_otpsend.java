@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,10 @@ public class Page_otpsend extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.EtEmail);
         sendOtpButton = findViewById(R.id.btn_kirim);
+        ImageButton buttonBack = findViewById(R.id.backbutton4);
+
+        // Set listener untuk tombol back
+        buttonBack.setOnClickListener(v -> finish());
 
         // Inisialisasi RequestQueue Volley
         requestQueue = Volley.newRequestQueue(this);
