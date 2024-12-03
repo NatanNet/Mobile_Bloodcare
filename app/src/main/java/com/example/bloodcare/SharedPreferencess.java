@@ -11,6 +11,7 @@ public class SharedPreferencess {
     private static final String IS_LOGGED_IN = "is_logged_in";
     private static final String USER_ID = "user_id";
     private static final String USERNAME_OR_EMAIL = "username_or_email";
+    private static final String PROFILE_COMPLETE = "profile_complete"; // Menyimpan status kelengkapan profil
 
     public SharedPreferencess(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -50,14 +51,24 @@ public class SharedPreferencess {
         return sharedPreferences.getString(USERNAME_OR_EMAIL, null); // null jika tidak ditemukan
     }
 
+
+    // Simpan status kelengkapan profil
+    public void saveProfileCompleteStatus(boolean isComplete) {
+        editor.putBoolean(PROFILE_COMPLETE, isComplete);
+        editor.apply();
+    }
+
+    // Ambil status kelengkapan profil
+    public boolean isProfileComplete() {
+        return sharedPreferences.getBoolean(PROFILE_COMPLETE, false);
+    }
+
     // Hapus data login (logout)
     public void logout() {
         editor.clear(); // Menghapus semua data yang ada di SharedPreferences
         editor.apply();
     }
 
-    // Cek apakah sudah login atau belum
-    public boolean isUserLoggedIn() {
-        return sharedPreferences.getBoolean(IS_LOGGED_IN, false);
-    }
+    // Cek apakah sudah login atau belum (redundansi yang dihapus)
+    // public boolean isUserLoggedIn() { return sharedPreferences.getBoolean(IS_LOGGED_IN, false); }
 }

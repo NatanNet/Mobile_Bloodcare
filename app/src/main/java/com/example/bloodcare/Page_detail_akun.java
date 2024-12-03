@@ -1,6 +1,7 @@
 package com.example.bloodcare;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,59 +91,60 @@ public class Page_detail_akun extends Fragment {
     }
 
     private void loadDataAkun(String usernameOrEmail) {
-        // Gunakan parameter "username_or_email" sesuai dengan parameter yang diinginkan API
         String urlWithParams = GET_URL + "?username_or_email=" + usernameOrEmail;
 
-        // Buat request JSON untuk mendapatkan detail akun
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWithParams, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            // Periksa apakah response berhasil
-                            if (response.getBoolean("success")) {
-                                JSONObject data = response.getJSONObject("data");
+                response -> {
+                    try {
+                        if (response.getBoolean("success")) {
+                            JSONObject data = response.getJSONObject("data");
 
-                                // Set data ke EditText
-                                editTextEmail.setText(data.optString("email", ""));
-                                editTextUsername.setText(data.optString("username", ""));
-                                editTextNamaLengkap.setText(data.optString("nama_lengkap", ""));
-//
-                                // Parse tanggal lahir dan ubah formatnya
-                                String tanggalLahir = data.optString("tanggal_lahir", "");
+                            editTextEmail.setText(data.optString("email", ""));
+                            editTextUsername.setText(data.optString("username", ""));
+                            editTextNamaLengkap.setText(data.optString("nama_lengkap", ""));
+
+                            // Ambil dan format tanggal lahir
+                            String tanggalLahir = data.optString("tanggal_lahir", "");
+                            Log.d("TanggalLahirAPI", "Tanggal lahir dari API: " + tanggalLahir);
+
+                            if (!tanggalLahir.isEmpty()) {
                                 String formattedTanggalLahir = formatTanggal(tanggalLahir);
                                 editTextTanggalLahir.setText(formattedTanggalLahir);
-                                editTextNoHp.setText(data.optString("no_hp", ""));
-                                editTextAlamat.setText(data.optString("alamat", ""));
                             } else {
-                                Toast.makeText(getContext(), "Gagal memuat data: " + response.optString("message", ""), Toast.LENGTH_SHORT).show();
+                                editTextTanggalLahir.setText("");
                             }
-                        } catch (JSONException e) {
-                            Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            editTextNoHp.setText(data.optString("no_hp", ""));
+                            editTextAlamat.setText(data.optString("alamat", ""));
+                        } else {
+                            Toast.makeText(getContext(), "Gagal memuat data: " + response.optString("message", ""), Toast.LENGTH_SHORT).show();
                         }
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                error -> Toast.makeText(getContext(), "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
-        // Tambahkan request ke queue
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(jsonObjectRequest);
     }
 
-    // Fungsi untuk mengubah format tanggal dari YYYY-MM-DD ke DD-MM-YYYY
     private String formatTanggal(String tanggal) {
+
+        // Periksa jika tanggal adalah 0000-00-00
+        if ("0000-00-00".equals(tanggal)) {
+            return ""; // Tampilkan teks kosong atau alternatif seperti "Tanggal tidak tersedia"
+        }
+
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedTanggal = "";
 
         try {
-            Date date = inputFormat.parse(tanggal);
-            formattedTanggal = outputFormat.format(date);
+            if (!tanggal.isEmpty()) {
+                Date date = inputFormat.parse(tanggal);
+                formattedTanggal = outputFormat.format(date);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Format tanggal tidak valid", Toast.LENGTH_SHORT).show();
@@ -151,4 +153,3 @@ public class Page_detail_akun extends Fragment {
         return formattedTanggal;
     }
 }
-

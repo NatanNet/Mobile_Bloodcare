@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,11 +33,17 @@ public class Page_otpverif extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main5); // Ganti dengan layout yang sesuai
+        setContentView(R.layout.activity_main5); // Sesuaikan dengan layout yang benar
 
         // Mendapatkan verificationId dan email dari intent
         verificationId = getIntent().getStringExtra("verificationId");
         email = getIntent().getStringExtra("email");
+
+        // Log untuk memastikan data intent diterima dengan benar
+        Log.d("Page_otpverif", "Email diterima: " + email);
+        if (email == null) {
+            Toast.makeText(this, "Email tidak diterima dari Intent", Toast.LENGTH_SHORT).show();
+        }
 
         // Menginisialisasi komponen UI
         text1 = findViewById(R.id.text1);
@@ -81,14 +88,10 @@ public class Page_otpverif extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 1) {
-                    if (nextEditText != null) {
-                        nextEditText.requestFocus();
-                    }
-                } else if (s.length() == 0) {
-                    if (currentEditText != text1) {
-                        currentEditText.focusSearch(View.FOCUS_LEFT).requestFocus();
-                    }
+                if (s.length() == 1 && nextEditText != null) {
+                    nextEditText.requestFocus();
+                } else if (s.length() == 0 && currentEditText != text1) {
+                    currentEditText.focusSearch(View.FOCUS_LEFT).requestFocus();
                 }
             }
         });
@@ -96,9 +99,8 @@ public class Page_otpverif extends AppCompatActivity {
 
     // Fungsi untuk memverifikasi OTP ke server
     private void verifyOtp(String otp) {
-        String url = Config.BASE_URL + "verifikasi_kode_otp.php";   // Ganti dengan URL server PHP Anda
+        String url = Config.BASE_URL + "verifikasi_kode_otp.php";   // URL server PHP Anda
 
-        // Membuat JSONObject untuk mengirim OTP
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("otp", otp);
@@ -107,38 +109,28 @@ public class Page_otpverif extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Membuat request POST menggunakan JsonObjectRequest
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-
-                            if (status.equals("success")) {
-                                Toast.makeText(Page_otpverif.this, "Verifikasi sukses", Toast.LENGTH_SHORT).show();
-                                // Lakukan pengalihan ke halaman ganti password setelah OTP diverifikasi
-                                Intent intent = new Intent(Page_otpverif.this, Page_forgotpass.class);
-                                intent.putExtra("email", email);  // Kirimkan email ke halaman ganti password
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                String message = response.getString("message");
-                                Toast.makeText(Page_otpverif.this, message, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(Page_otpverif.this, "Terjadi kesalahan: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        if (status.equals("success")) {
+                            Toast.makeText(Page_otpverif.this, "Verifikasi sukses", Toast.LENGTH_SHORT).show();
+                            // Kirim email ke Page_forgotpass
+                            Intent intent = new Intent(Page_otpverif.this, Page_forgotpass.class);
+                            Log.d("Page_otpverif", "Email dikirim: " + email);
+                            intent.putExtra("email", email);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(Page_otpverif.this, response.getString("message"), Toast.LENGTH_SHORT).show();
                         }
+                    } catch (JSONException e) {
+                        Toast.makeText(Page_otpverif.this, "Kesalahan JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Page_otpverif.this, "Gagal terhubung ke server: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                error -> Toast.makeText(Page_otpverif.this, "Gagal koneksi: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        );
 
         requestQueue.add(jsonObjectRequest);
     }

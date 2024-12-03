@@ -1,50 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Nama Pendonor" />
-    <EditText
-        android:id="@+id/et_nama_pendonor"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Yulia Gita Permata Sari" />
+        android:id="@+id/main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lokasi Donor" />
-    <EditText
-        android:id="@+id/et_lokasi_donor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Balai Desa Warujayeng" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No HP/Email" />
-    <EditText
-        android:id="@+id/et_contact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="089467789000" />
+            android:padding="16dp">
 
-    <!-- Tambahkan field lain sesuai gambar... -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Golongan darah" />
-    <EditText
-        android:id="@+id/et_golda"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="O-" />
-</LinearLayout>
+            <!-- Nama Pendonor -->
+
+            <ImageButton
+                android:id="@+id/back1"
+                android:layout_marginTop="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Nama Pendonor"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/et_nama_pendonor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Pendonor"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="false"
+                android:focusable="false"/>
+
+
+            <!-- Lokasi Donor -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lokasi donor"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/et_lokasi_donor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Lokasi donor"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="false"
+                android:focusable="false"/>
+
+            <!-- No HP/e-mail -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No HP"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/et_kontak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No.hp"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="false"
+                android:focusable="false"/>
+
+            <!-- Tinggi badan/berat badan -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Berat badan/golongan darah"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/et_bb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="berat"
+                    android:inputType="number"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:background="@drawable/custom_edit_text_background"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kg"
+                    android:padding="8dp" />
+
+                <EditText
+                    android:id="@+id/et_goldar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="golongan darah"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:background="@drawable/custom_edit_text_background"
+                    android:padding="8dp" />
+
+            </LinearLayout>
+
+
+
+            <!-- Jumlah kantong darah -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jumlah kantong darah"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <!-- Tekanan darah -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/custom_edit_text_background"
+                android:hint="kantong"
+                android:inputType="number"
+                android:clickable="false"
+                android:focusable="false"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tekanan darah"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/et_tekanan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp"
+                android:hint="tekanan darah"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="number"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rhesus"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/et_rhesus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edit_text_background"
+                android:padding="8dp"
+                android:hint="rhesus"
+                android:layout_marginBottom="16dp"
+                android:clickable="false"
+                android:focusable="false"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

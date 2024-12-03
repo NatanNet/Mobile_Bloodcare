@@ -2,16 +2,19 @@ package com.example.bloodcare;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +33,11 @@ import java.util.Map;
 public class Page_edit_akun extends Fragment {
 
     private EditText editTextEmail, editTextUsername, editTextNamaLengkap, editTextTanggalLahir, editTextNoHp, editTextAlamat;
+    private ImageView imgProfile; // Tambahkan ImageView untuk foto profil
     private final String GET_URL = Config.BASE_URL + "akun_detail.php";
     private final String UPDATE_URL = Config.BASE_URL + "edit_akun.php"; // URL untuk update data
     private String oldUsername; // Variabel untuk menyimpan username lama
+    private static final int PICK_IMAGE = 1; // Request code untuk memilih gambar
 
     public Page_edit_akun() {
         // Required empty public constructor
@@ -48,6 +54,9 @@ public class Page_edit_akun extends Fragment {
         editTextTanggalLahir = view.findViewById(R.id.etTglLahir);
         editTextNoHp = view.findViewById(R.id.etNomorHp);
         editTextAlamat = view.findViewById(R.id.EtAlamat);
+
+        // Inisialisasi ImageView untuk foto profil
+        imgProfile = view.findViewById(R.id.imageProfil);
 
         // Ambil data dari arguments
         if (getArguments() != null) {
@@ -76,9 +85,37 @@ public class Page_edit_akun extends Fragment {
             saveDataAkun(oldUsername);
         });
 
+        // Listener untuk foto profil
+        imgProfile.setOnClickListener(v -> openGallery());
+
         return view;
     }
 
+    // Fungsi untuk membuka galeri
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    // Mendapatkan hasil gambar yang dipilih dari galeri
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == getActivity().RESULT_OK && requestCode == PICK_IMAGE) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                imgProfile.setImageBitmap(bitmap); // Menampilkan gambar yang dipilih ke ImageView
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Gagal memuat gambar", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Fungsi untuk memilih tanggal
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -86,6 +123,7 @@ public class Page_edit_akun extends Fragment {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                R.style.DatePickerDialogTheme, // Menggunakan tema kustom
                 (view, year1, month1, dayOfMonth) -> {
                     String selectedDate = String.format("%04d-%02d-%02d", year1, month1 + 1, dayOfMonth);
                     editTextTanggalLahir.setText(selectedDate);

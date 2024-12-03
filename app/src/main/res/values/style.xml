@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="CircleImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <!-- Tema kustom untuk DatePickerDialog -->
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Mengubah warna tombol -->

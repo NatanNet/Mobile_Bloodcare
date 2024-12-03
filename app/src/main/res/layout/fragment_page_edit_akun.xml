@@ -37,11 +37,15 @@
         android:orientation="vertical">
 
         <!-- Profile Avatar -->
-        <ImageView
-            android:id="@+id/imgProfile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/pplaki" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageProfil"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            android:contentDescription="ProfileImage"/>
 
        
     </LinearLayout>

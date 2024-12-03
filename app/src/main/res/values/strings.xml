@@ -4,4 +4,11 @@
     <string name="anjayy">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="jenis_darah_array">
+        <item>Whole Blood</item>
+        <item>Packed Red Cells</item>
+        <item>Thrombocyte Concentrate</item>
+        <item>Fresh Frozen Plasma</item>
+    </string-array>
 </resources>
