@@ -2,6 +2,7 @@ package com.example.bloodcare;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri; // Import Uri untuk membuka link
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog; // Import AlertDialog
+
+import com.bumptech.glide.Glide;
 
 public class Page_akun extends Fragment {
 
@@ -39,7 +42,20 @@ public class Page_akun extends Fragment {
         ImageView imageViewGoToOTP = view.findViewById(R.id.gantipss); // ImageView untuk menuju ke Page_otpsend
         ImageView imageViewGoogle = view.findViewById(R.id.tentangkami1); // ImageView untuk membuka Google atau URL lain
         ImageView imageViewPusatBantuan = view.findViewById(R.id.bantuan1); // Tombol pusat bantuan
+        ImageView imgProfile = view.findViewById(R.id.imgProfile);
+        Bitmap savedImage = ImageUtil.loadImageFromSharedPreferences(getContext());
 
+        if (savedImage != null) {
+            // Gunakan Glide untuk menampilkan gambar dalam ImageView
+            Glide.with(this)
+                    .load(savedImage) // Memuat Bitmap ke Glide
+                    .into(imgProfile); // Menampilkan di ImageView
+        } else {
+            // Gambar default jika tidak ada gambar yang disimpan
+            Glide.with(this)
+                    .load(R.drawable.ic_profile) // Gambar default
+                    .into(imgProfile); // Menampilkan gambar default
+        }
         // Listener untuk buttonNavigate
         buttonNavigate.setOnClickListener(new View.OnClickListener() {
             @Override

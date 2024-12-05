@@ -41,55 +41,56 @@ public class Page_acaradonor extends AppCompatActivity {
         setContentView(R.layout.activity_page_acaradonor);
 
         etDate = findViewById(R.id.etDate);
-        editTextData = findViewById(R.id.editTextLokasiDonor); // Lokasi Donor
-        editTextFasiltas = findViewById(R.id.editTextFasilitas); // Fasilitas Donor
+        editTextData = findViewById(R.id.editTextLokasiDonor);
+        editTextFasiltas = findViewById(R.id.editTextFasilitas);
         editTextwaktu = findViewById(R.id.editTextwaktuDonor);
-
         buttonSimpan = findViewById(R.id.btnSave);
         ImageButton buttonback = findViewById(R.id.imageButton3);
 
-        // Menampilkan DatePicker saat klik EditText
-        etDate.setOnClickListener(v -> showDatePicker());
+        // Cek apakah Intent membawa data untuk mode edit
+        Intent intent = getIntent();
+        boolean isEditMode = intent.getBooleanExtra("is_edit_mode", false);
+        String idAcara = intent.getStringExtra("id_acara");
 
-        // Ketika tombol simpan diklik
+        if (isEditMode) {
+            // Mode edit, isi data ke EditText
+            editTextData.setText(intent.getStringExtra("lokasi"));
+            editTextFasiltas.setText(intent.getStringExtra("fasilitas"));
+            editTextwaktu.setText(intent.getStringExtra("time_waktu"));
+            etDate.setText(intent.getStringExtra("tgl_acara"));
+            buttonSimpan.setText("Perbarui"); // Ubah teks tombol menjadi "Perbarui"
+        } else {
+            buttonSimpan.setText("Simpan"); // Default teks tombol
+        }
+
+        // Klik Listener Tombol
         buttonSimpan.setOnClickListener(v -> {
             String lokasiDonor = editTextData.getText().toString().trim();
             String tanggalAcara = etDate.getText().toString().trim();
-            String fasilitas = editTextFasiltas.getText().toString().trim();  // ngambil data dari edittext fasilitas
-            String waktu = editTextwaktu.getText().toString().trim();   // ngambil data dari edittext waktu
+            String fasilitas = editTextFasiltas.getText().toString().trim();
+            String waktu = editTextwaktu.getText().toString().trim();
 
             if (lokasiDonor.isEmpty() || tanggalAcara.isEmpty() || waktu.isEmpty()) {
-                // Jika data belum diisi
                 Toast.makeText(Page_acaradonor.this, "Lengkapi data", Toast.LENGTH_SHORT).show();
             } else {
-                // Jika data valid, kirim data ke server
-                simpanDataAcaraDonor(lokasiDonor, tanggalAcara, fasilitas, waktu);
+                if (isEditMode) {
+                    // Mode Edit
+                    updateData(idAcara, lokasiDonor, fasilitas, waktu, tanggalAcara);
+                } else {
+                    // Mode Insert
+                    simpanDataAcaraDonor(lokasiDonor, tanggalAcara, fasilitas, waktu);
+                }
             }
         });
 
         // Tombol kembali
         buttonback.setOnClickListener(v -> finish());
 
-        // Menambahkan klik listener untuk input waktu
-        editTextwaktu.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
+        // Menampilkan DatePicker saat klik EditText
+        etDate.setOnClickListener(v -> showDatePicker());
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(
-                    Page_acaradonor.this,
-                    R.style.DatePickerDialogTheme, // Menggunakan tema kustom
-                    new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            // Format waktu menjadi HH:mm:ss
-                            String time = String.format("%02d:%02d:00", hourOfDay, minute);  // Memastikan format adalah HH:mm:ss
-                            editTextwaktu.setText(time);  // Menampilkan waktu di EditText
-                        }
-                    }, hour, minute, true);
-
-            timePickerDialog.show();
-        });
+        // Menampilkan TimePicker saat klik EditText waktu
+        editTextwaktu.setOnClickListener(v -> showTimePicker());
     }
 
     // Fungsi untuk memilih tanggal
@@ -101,13 +102,32 @@ public class Page_acaradonor extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 Page_acaradonor.this,
-                R.style.DatePickerDialogTheme, // Menggunakan tema kustom
+                R.style.DatePickerDialogTheme,
                 (view, selectedYear, selectedMonth, selectedDay) ->
                         etDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear),
                 year, month, day
         );
         datePickerDialog.show();
     }
+
+    // Fungsi untuk memilih waktu
+    private void showTimePicker() {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                Page_acaradonor.this,
+                R.style.DatePickerDialogTheme,
+                (view, hourOfDay, minuteOfHour) -> {
+                    String time = String.format("%02d:%02d:00", hourOfDay, minuteOfHour);
+                    editTextwaktu.setText(time);
+                },
+                hour, minute, true
+        );
+        timePickerDialog.show();
+    }
+
 
     // Fungsi untuk mengirimkan data acara donor ke server PHP
     private void simpanDataAcaraDonor(String lokasiDonor, String tanggal, String fasilitas, String waktu) {
@@ -167,4 +187,29 @@ public class Page_acaradonor extends AppCompatActivity {
             Toast.makeText(Page_acaradonor.this, "Format tanggal salah", Toast.LENGTH_SHORT).show();
         }
     }
+    // Fungsi untuk mengupdate data
+    private void updateData(String idAcara, String lokasi, String fasilitas, String timeWaktu, String tglAcara) {
+        String UPDATE_URL = Config.BASE_URL + "edit_acara.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST, UPDATE_URL,
+                response -> {
+                    Toast.makeText(this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
+                    finish(); // Kembali ke list
+                },
+                error -> Toast.makeText(this, "Gagal memperbarui data", Toast.LENGTH_SHORT).show()) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_acara", idAcara);
+                params.put("lokasi", lokasi);
+                params.put("fasilitas", fasilitas);
+                params.put("time_waktu", timeWaktu);
+                params.put("tgl_acara", tglAcara);
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
 }
+    }

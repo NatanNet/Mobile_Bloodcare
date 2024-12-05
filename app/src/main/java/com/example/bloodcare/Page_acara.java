@@ -45,6 +45,7 @@ public class Page_acara extends Fragment {
         listView = view.findViewById(R.id.listView);
         fetchData();
 
+
         return view;
     }
 
@@ -128,8 +129,10 @@ public class Page_acara extends Fragment {
                 intent.putExtra("fasilitas", item.get("fasilitas"));
                 intent.putExtra("time_waktu", item.get("time_waktu"));
                 intent.putExtra("tgl_acara", item.get("tgl_acara"));
+                intent.putExtra("is_edit_mode", true); // Tambahkan flag untuk edit mode
                 startActivity(intent);
             });
+
 
             // Tombol Delete
             btnDelete.setOnClickListener(v -> {

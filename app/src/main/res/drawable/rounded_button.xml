@@ -4,14 +4,14 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/merah2" /> <!-- Warna saat ditekan -->
             <corners android:radius="16dp" /> <!-- Radius yang lebih besar untuk sudut melengkung -->
-            <stroke android:width="1dp" android:color="@color/black" /> <!-- Garis tepi -->
+            <stroke android:width="1dp" android:color="@color/merahpmi" /> <!-- Garis tepi -->
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/merahpmi" /> <!-- Warna default -->
             <corners android:radius="16dp" /> <!-- Radius yang lebih besar untuk sudut melengkung -->
-            <stroke android:width="1dp" android:color="@color/black" /> <!-- Garis tepi -->
+            <stroke android:width="1dp" android:color="@color/merahpmi" /> <!-- Garis tepi -->
         </shape>
     </item>
 </selector>

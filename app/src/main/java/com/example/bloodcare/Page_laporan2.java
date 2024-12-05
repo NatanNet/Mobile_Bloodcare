@@ -16,6 +16,7 @@ public class Page_laporan2 extends AppCompatActivity {
     private Button buttonlihat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_page_laporan2);
@@ -25,7 +26,6 @@ public class Page_laporan2 extends AppCompatActivity {
         buttonBack.setOnClickListener(v -> finish());
 
         // Ambil data dari Intent
-        String id_laporan = getIntent().getStringExtra("id_laporan");
         String nama = getIntent().getStringExtra("nama_pendonor");
         String lokasiDonor = getIntent().getStringExtra("lokasi_donor");
         String beratbadan = getIntent().getStringExtra("berat_badan");

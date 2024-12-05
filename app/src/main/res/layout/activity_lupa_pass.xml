@@ -19,16 +19,11 @@
         android:layout_marginLeft="10dp"
         android:fontFamily="@font/poppins_semibold"
         android:paddingTop="50dp"
-        android:text="Lupa Kata Sandi"
+        android:text="Ganti Kata Sandi"
         android:textColor="@color/merah"
         android:textSize="24sp"
         android:textStyle="bold" />
-
-    <!-- EditText untuk Username -->
-
     <!-- EditText untuk Email -->
-
-    <!-- EditText untuk Password -->
     <!-- EditText untuk Password -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TextInputLayout3"
@@ -53,7 +48,6 @@
             android:fontFamily="@font/poppins_medium"
             android:inputType="text"
             android:padding="10dp"
-
             android:textSize="14sp" />
 
         <ImageView

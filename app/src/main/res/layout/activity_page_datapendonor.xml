@@ -178,7 +178,7 @@
             android:background="@drawable/custom_edit_text_background"
             android:padding="8dp"
             android:hint="tekanan darah"
-            android:inputType="text"
+            android:inputType="number|text"
             android:layout_marginBottom="16dp" />
 
         <TextView

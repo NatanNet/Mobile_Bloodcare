@@ -61,6 +61,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
             intent.putExtra("alamat", selectedDonor.get("alamat"));
             intent.putExtra("rhesus", selectedDonor.get("rhesus"));
             intent.putExtra("id_pendonor", selectedDonor.get("id_pendonor"));
+            intent.putExtra("id_akun", selectedDonor.get("id_akun"));
 
 
 
@@ -93,6 +94,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
                                 donorData.put("alamat", dataObj.optString("alamat"));
                                 donorData.put("rhesus", dataObj.optString("rhesus"));
                                 donorData.put("id_pendonor", dataObj.optString("id_pendonor"));
+                                donorData.put("id_akun", dataObj.optString("id_akun"));
 
                                 donorList.add(donorData);
                             }

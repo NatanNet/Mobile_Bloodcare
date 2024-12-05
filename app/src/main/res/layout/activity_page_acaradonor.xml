@@ -87,7 +87,7 @@
             android:layout_margin="3dp"
             android:textColorHint="#4E4E4E"
             android:background="@drawable/edit_text_background"
-            android:hint="Pilih Tanggal"
+            android:hint="Pilih Waktu"
             android:padding="20dp" />
 
 

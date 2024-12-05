@@ -27,7 +27,7 @@ public class Page_stokdarah2 extends AppCompatActivity {
     private Spinner etJenisDarah;
     private Button btnSubmit;
     private String golonganDarah;
-    private static final String URL = "http://192.168.1.92/website_bloodcare/api/mobile/stok_darah.php";
+    private static final String URL = Config.BASE_URL+ "stok_darah.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

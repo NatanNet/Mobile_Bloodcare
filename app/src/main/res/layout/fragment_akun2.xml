@@ -155,7 +155,6 @@
                 android:padding="12dp"
                 android:clickable="false"
                 android:focusable="false"/>
-
             <!-- Alamat Field -->
             <TextView
                 android:layout_width="wrap_content"
@@ -176,5 +175,4 @@
                 android:focusable="false"/>
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

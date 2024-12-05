@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <LinearLayout
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -39,8 +38,6 @@
             android:textColor="#9C252A"
             android:textSize="20sp" />
 
-
-
         <!-- Penambahan ImageView untuk ikon di pojok kanan teks Laporan -->
         <ImageView
             android:id="@+id/iconLaporan"
@@ -65,8 +62,6 @@
             android:padding="8dp" />
     </LinearLayout>
 
-
     </LinearLayout>
-
 
     </androidx.core.widget.NestedScrollView>

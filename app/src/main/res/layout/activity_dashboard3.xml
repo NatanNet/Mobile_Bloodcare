@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:layout_gravity="center">
 
@@ -20,6 +21,8 @@
             android:id="@+id/imgProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/CircleImage"
             android:src="@drawable/pplaki"
             android:layout_gravity="center" />
 

@@ -47,10 +47,7 @@
             app:shapeAppearanceOverlay="@style/CircleImage"
             android:contentDescription="ProfileImage"/>
 
-       
     </LinearLayout>
-
-
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -152,10 +149,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:inputType="phone"
-                android:padding="12dp"
-                />
+                android:padding="12dp" />
 
-            <!-- Alamat Field -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

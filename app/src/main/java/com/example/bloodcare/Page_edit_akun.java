@@ -2,15 +2,19 @@ package com.example.bloodcare;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,14 +25,35 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.example.bloodcare.api.ApiClient;
+import com.example.bloodcare.api.ApiService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class Page_edit_akun extends Fragment {
 
@@ -57,6 +82,45 @@ public class Page_edit_akun extends Fragment {
 
         // Inisialisasi ImageView untuk foto profil
         imgProfile = view.findViewById(R.id.imageProfil);
+        Bitmap savedImage = ImageUtil.loadImageFromSharedPreferences(getContext());
+
+        if (savedImage != null) {
+            // Gunakan Glide untuk menampilkan gambar dalam ImageView
+            Glide.with(this)
+                    .load(savedImage) // Memuat Bitmap ke Glide
+                    .into(imgProfile); // Menampilkan di ImageView
+        } else {
+            // Gambar default jika tidak ada gambar yang disimpan
+            Glide.with(this)
+                    .load(R.drawable.ic_profile) // Gambar default
+                    .into(imgProfile); // Menampilkan gambar default
+        }
+        // Tombol kembali
+        ImageButton backButton = view.findViewById(R.id.backbutton6);
+        backButton.setOnClickListener(v -> getParentFragmentManager().popBackStack()); // Kembali ke fragment sebelumnya
+
+        // Validasi panjang minimal dan maksimal untuk nomor telepon
+        editTextNoHp.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)}); // Maksimal 13 karakter
+        editTextNoHp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Tidak perlu diproses
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Tidak perlu diproses
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() < 11) {
+                    editTextNoHp.setError("Nomor telepon minimal 11 karakter");
+                } else if (s.length() > 13) {
+                    editTextNoHp.setError("Nomor telepon maksimal 13 karakter");
+                }
+            }
+        });
 
         // Ambil data dari arguments
         if (getArguments() != null) {
@@ -64,6 +128,19 @@ public class Page_edit_akun extends Fragment {
             if (!oldUsername.isEmpty()) {
                 loadDataAkun(oldUsername);
             }
+        }
+
+        // Menonaktifkan klik pada EditText Nama Lengkap jika sudah terisi
+        editTextNamaLengkap.setClickable(true); // Secara default nonaktifkan
+        editTextNamaLengkap.setFocusable(true);  // Menonaktifkan fokus
+
+        // Cek apakah nama lengkap sudah terisi atau belum
+        if (!editTextNamaLengkap.getText().toString().isEmpty()) {
+            editTextNamaLengkap.setClickable(true);
+            editTextNamaLengkap.setFocusable(true);
+        } else {
+            editTextNamaLengkap.setClickable(false);
+            editTextNamaLengkap.setFocusable(false);
         }
 
         // Listener untuk EditText tanggal lahir
@@ -104,7 +181,7 @@ public class Page_edit_akun extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == getActivity().RESULT_OK && requestCode == PICK_IMAGE) {
-            Uri imageUri = data.getData();
+             imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
                 imgProfile.setImageBitmap(bitmap); // Menampilkan gambar yang dipilih ke ImageView
@@ -152,7 +229,14 @@ public class Page_edit_akun extends Fragment {
                             Toast.makeText(getContext(), "Gagal memuat data: " + response.optString("message", ""), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();;
+                        e.getMessage();
+                        Log.e("eerroR", e.getMessage());
+                        Log.e("eerroR", Arrays.toString(e.getStackTrace()));
+
+                        Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getStackTrace(), Toast.LENGTH_SHORT).show();
                         Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
                     }
                 },
                 error -> Toast.makeText(getContext(), "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show());
@@ -160,8 +244,18 @@ public class Page_edit_akun extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(jsonObjectRequest);
     }
+    Uri imageUri;
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-    private void saveDataAkun(String oldUsername) {
+    public void saveDataAkun(String oldUsername) {
         String usernameBaru = editTextUsername.getText().toString().trim();
         String noTelepon = editTextNoHp.getText().toString().trim();
         String alamat = editTextAlamat.getText().toString().trim();
@@ -173,46 +267,131 @@ public class Page_edit_akun extends Fragment {
             return;
         }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPDATE_URL,
-                response -> {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        if (jsonResponse.getBoolean("success")) {
-                            Toast.makeText(getContext(), "Data berhasil diperbarui", Toast.LENGTH_SHORT).show();
+        // Menyiapkan gambar hanya jika ada
+        MultipartBody.Part body = null;
+        if (imageUri != null) {
+            Bitmap bitmap = getBitmapFromUri(imageUri);
+            ImageUtil.saveImageToSharedPreferences(getContext(), bitmap);
+            File imageFile = new File(getRealPathFromURI(imageUri)); // Mengonversi Uri ke file
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
+            body = MultipartBody.Part.createFormData("profile_picture", imageFile.getName(), requestFile);
 
-                            // Kirim intent ke Page_dashboard activity
-                            Intent intent = new Intent(getContext(), Page_dashboard.class);
-                            intent.putExtra("username_or_email", usernameBaru); // Mengirimkan username baru
+        }
 
-                            // Start the activity
-                            startActivity(intent);
+        // Membuat RequestBody untuk data teks lainnya
+        RequestBody idAkun = RequestBody.create(MediaType.parse("text/plain"), "28");
+        RequestBody username = RequestBody.create(MediaType.parse("text/plain"), usernameBaru);
+        RequestBody noHp = RequestBody.create(MediaType.parse("text/plain"), noTelepon);
+        RequestBody alamatReq = RequestBody.create(MediaType.parse("text/plain"), alamat);
+        RequestBody namaLengkapReq = RequestBody.create(MediaType.parse("text/plain"), namaLengkap);
+        RequestBody tanggalLahirReq = RequestBody.create(MediaType.parse("text/plain"), tanggalLahir);
 
-                            // Optionally, you can finish the current fragment/fragment activity if you want to close it
-                            getActivity().finish();
-                        } else {
-                            Toast.makeText(getContext(), "Gagal memperbarui data: " + jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
-                        }
+        // Menggunakan Retrofit untuk mengirimkan data
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ApiResponse> call = apiService.updateProfile(
+                idAkun, username, noHp, alamatReq, namaLengkapReq, tanggalLahirReq, body
+        );
 
-                    } catch (JSONException e) {
-                        Toast.makeText(getContext(), "Kesalahan parsing respons: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                },
-                error -> Toast.makeText(getContext(), "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show()) {
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("username", oldUsername);
-                params.put("username_baru", usernameBaru);
-                params.put("no_telepon", noTelepon);
-                params.put("alamat", alamat);
-                params.put("nama_lengkap", namaLengkap);
-                params.put("tanggal_lahir", tanggalLahir);
-                return params;
-            }
-        };
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    Log.d("hasil = " , apiResponse.getMessage());
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
+                    if ("success".equals(apiResponse.getStatus())) {
+                        // Menampilkan pesan sukses
+                        Toast.makeText(getContext(), "Profil Anda berhasil diperbarui", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Menampilkan pesan gagal dengan alasan dari API
+                        Toast.makeText(getContext(), "Gagal memperbarui data: " + apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Menampilkan error jika response tidak sukses
+                    Toast.makeText(getContext(), "Terjadi kesalahan: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                // Menampilkan error jika gagal menghubungi server
+                Toast.makeText(getContext(), "Gagal menghubungi server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+    private byte[] getFileBytes(Uri imageUri) {
+        File file = new File(getRealPathFromURI(imageUri));
+
+        // Cek apakah file ada
+        if (!file.exists()) {
+            Log.e("FileError", "File not found: " + file.getAbsolutePath());
+            return null;  // Return null jika file tidak ditemukan
+        }
+
+        byte[] fileBytes = null;
+
+        try {
+            // Membaca file ke dalam byte array
+            FileInputStream fileInputStream = new FileInputStream(file);
+            fileBytes = new byte[(int) file.length()];
+            fileInputStream.read(fileBytes);
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("FileError", "Failed to convert file to bytes: " + e.getMessage());
+        }
+
+        return fileBytes;
+    }
+    // Fungsi untuk mendapatkan path dari Uri gambar
+    private String getPathFromUri(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+            return filePath;
+        }
+        return null;
+    }
+
+    // Fungsi untuk mengkonversi Uri menjadi byte array
+    private byte[] getFileDataFromUri(Uri uri) {
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+
+        if (cursor == null) {
+            // URI bukan file lokal, coba ambil path lain (untuk URI non-dalam penyimpanan lokal)
+            return contentUri.getPath();  // untuk konten yang bukan dari galeri
+        }
+
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        String filePath = cursor.getString(columnIndex);
+        cursor.close();
+
+        return filePath;
+    }
+
+
 
 }

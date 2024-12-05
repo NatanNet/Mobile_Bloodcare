@@ -14,7 +14,8 @@
 
         <!-- Greeting Text -->
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/idhalo"
+            android:layout_width="315dp"
             android:layout_height="64dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
@@ -28,6 +29,8 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="end"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/CircleImage"
             android:contentDescription="Profile Picture"
             android:src="@drawable/pplaki" />
     </LinearLayout>
@@ -179,7 +182,6 @@
                 android:textColor="#000000"
                 android:textSize="14sp" />
         </LinearLayout>
-
         <!-- Reports -->
         <LinearLayout
             android:id="@+id/laporanklik"
@@ -206,7 +208,4 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </GridLayout>
-
-    <!-- Upload Article Section -->
-
 </FrameLayout>

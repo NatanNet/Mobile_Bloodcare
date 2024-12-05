@@ -1,24 +1,37 @@
 package com.example.bloodcare;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Page_beranda extends Fragment {
+
+    private RequestQueue requestQueue;
+    private TextView halo;
 
     public Page_beranda() {
         // Required empty public constructor
@@ -31,72 +44,97 @@ public class Page_beranda extends Fragment {
         // Inflate layout untuk fragment
         View view = inflater.inflate(R.layout.activity_dashboard1, container, false);
 
-        // Inisialisasi LinearLayout dengan ID yang sesuai
-        LinearLayout layoutKlik = view.findViewById(R.id.acaraklik);
-        LinearLayout dataKlik = view.findViewById(R.id.datadonorklik); // Pastikan ID ini berbeda di XML
-        LinearLayout stokKlik = view.findViewById(R.id.stokklik);
-        LinearLayout laporanKlik = view.findViewById(R.id.laporanklik);
+        requestQueue = Volley.newRequestQueue(requireContext());
+        halo = view.findViewById(R.id.idhalo);
+
+        // Mengambil username atau email dari arguments
+        Bundle bundle = getArguments();
+        String usernameOrEmail = bundle != null ? bundle.getString("username_or_email") : null;
+        Bitmap savedImage = ImageUtil.loadImageFromSharedPreferences(getContext());
+        ImageView imgProfile = view.findViewById(R.id.profil);
+        if (savedImage != null) {
+            // Gunakan Glide untuk menampilkan gambar dalam ImageView
+            Glide.with(this)
+                    .load(savedImage) // Memuat Bitmap ke Glide
+                    .into(imgProfile); // Menampilkan di ImageView
+        } else {
+            // Gambar default jika tidak ada gambar yang disimpan
+            Glide.with(this)
+                    .load(R.drawable.ic_profile) // Gambar default
+                    .into(imgProfile); // Menampilkan gambar default
+        }        if (usernameOrEmail != null) {
+            fetchUserFullName(usernameOrEmail);
+        } else {
+            halo.setText("Halo,\nGuest");
+        }
+
+        // Menampilkan tanggal saat ini
         TextView date = view.findViewById(R.id.dateTextView);
-
-        // New ImageView initializations
-        ImageView imageViewakun = view.findViewById(R.id.profil);
-
-        // Mendapatkan tanggal saat ini menggunakan Calendar
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy"); // Format: Hari, Tanggal Bulan Tahun
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy");
+        date.setText(sdf.format(calendar.getTime()));
 
-        // Format tanggal dan set ke TextView
-        String currentDate = sdf.format(calendar.getTime());
-        date.setText(currentDate);
-
-        imageViewakun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Pindah ke fragment akun
-                Fragment secondFragment = new Page_akun();
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameLayout, secondFragment); // ganti `fragment_container` dengan ID dari layout container fragment Anda
-                transaction.addToBackStack(null); // Menambahkan ke back stack agar bisa kembali
-                transaction.commit();
-            }
-        });
-
-        // Set onClickListener pada LinearLayout untuk berpindah ke Activity Page_acaradonor
-        layoutKlik.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Page_acaradonor.class);
-                startActivity(intent);
-            }
-        });
-
-        // Set onClickListener pada LinearLayout untuk berpindah ke Activity Page_datadonor
-        dataKlik.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Page_datapendonor2.class);
-                startActivity(intent);
-            }
-        });
-
-        stokKlik.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Page_stokdarah.class);
-                startActivity(intent);
-            }
-        });
-
-
-        laporanKlik.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Page_laporan.class);
-                startActivity(intent);
-            }
-        });
-//
+        // Mengatur klik listener untuk navigasi
+        setupListeners(view);
 
         return view;
+    }
+
+    private void fetchUserFullName(String usernameOrEmail) {
+        String url = Config.BASE_URL + "get_user_fullname.php?username_or_email=" + usernameOrEmail;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if (response.has("username")) {
+                            String username = response.getString("username");
+                            // Set text with newline to separate "Halo," and the username
+                            halo.setText("Halo,\n" + username + "!");
+                        } else {
+                            halo.setText("Halo,\nUser");
+                            Toast.makeText(getContext(), response.getString("error"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        halo.setText("Halo,\nUser");
+                        Toast.makeText(getContext(), "JSON Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> {
+            halo.setText("Halo,\nUser");
+            Log.e("Page_beranda", "Error: " + error.getMessage());
+            Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+        });
+
+        requestQueue.add(request);
+    }
+
+
+
+    private void setupListeners(View view) {
+        LinearLayout layoutKlik = view.findViewById(R.id.acaraklik);
+        LinearLayout dataKlik = view.findViewById(R.id.datadonorklik);
+        LinearLayout stokKlik = view.findViewById(R.id.stokklik);
+        LinearLayout laporanKlik = view.findViewById(R.id.laporanklik);
+        ImageView imageViewakun = view.findViewById(R.id.profil);
+
+        layoutKlik.setOnClickListener(v -> startActivity(new Intent(getActivity(), Page_acaradonor.class)));
+        dataKlik.setOnClickListener(v -> startActivity(new Intent(getActivity(), Page_datapendonor2.class)));
+        stokKlik.setOnClickListener(v -> startActivity(new Intent(getActivity(), Page_stokdarah.class)));
+        laporanKlik.setOnClickListener(v -> startActivity(new Intent(getActivity(), Page_laporan.class)));
+
+        imageViewakun.setOnClickListener(v -> {
+            Fragment secondFragment = new Page_akun();
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameLayout, secondFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this);
+        }
     }
 }
