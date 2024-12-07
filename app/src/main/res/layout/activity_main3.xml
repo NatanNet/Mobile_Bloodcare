@@ -104,29 +104,20 @@
             android:layout_marginTop="5dp"
             android:hint="Password"
             app:boxStrokeColor="@color/white"
+            app:endIconMode="password_toggle"
             app:counterEnabled="true"
             app:counterMaxLength="8"
-            app:endIconMode="password_toggle"
             app:helperText="Enter Password"
-            app:helperTextEnabled="true"
-            app:helperTextTextColor="@color/black"
-            app:hintEnabled="true">
+            app:helperTextTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textpass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_eye"
                 android:fontFamily="@font/poppins_medium"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:padding="10dp"
-
                 android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_eye" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

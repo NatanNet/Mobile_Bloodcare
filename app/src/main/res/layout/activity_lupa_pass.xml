@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_eye"
             android:fontFamily="@font/poppins_medium"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:padding="10dp"
             android:textSize="14sp" />
 

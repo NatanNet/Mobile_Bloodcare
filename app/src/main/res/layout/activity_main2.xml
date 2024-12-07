@@ -76,10 +76,9 @@
                 android:id="@+id/textpass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:textSize="14sp"
                 android:padding="10dp"
-
                 android:drawableEnd="@drawable/ic_eye"/>
             <ImageView
                 android:layout_width="wrap_content"
