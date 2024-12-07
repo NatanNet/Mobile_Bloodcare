@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -29,11 +30,15 @@
         android:orientation="vertical">
 
         <!-- Profile Avatar -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/pplaki" />
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            android:contentDescription="ProfileImage"/>
 
         <!-- Edit Profile Button -->
         <Button
@@ -43,6 +48,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/merahpmi"
             android:gravity="center"
             android:onClick="editProfileClick"
             android:padding="10dp"

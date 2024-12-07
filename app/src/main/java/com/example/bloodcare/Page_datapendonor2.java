@@ -2,6 +2,7 @@ package com.example.bloodcare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,12 +21,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.net.URLEncoder;
+
 
 public class Page_datapendonor2 extends AppCompatActivity {
 
     private ListView listView;
     private DonorAdapter adapter;
     private ArrayList<HashMap<String, String>> donorList;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,40 +41,62 @@ public class Page_datapendonor2 extends AppCompatActivity {
         adapter = new DonorAdapter(this, donorList);
         listView.setAdapter(adapter);
 
+        // Tombol untuk kembali ke halaman sebelumnya
         ImageButton buttonBack = findViewById(R.id.imageButton4);
         buttonBack.setOnClickListener(v -> finish());
 
-        SearchView searchView = findViewById(R.id.searchView);
+        // Inisialisasi SearchView
+        searchView = findViewById(R.id.searchView);
         searchView.setQueryHint("Cari nama pendonor");
 
-        fetchDonorData();
-
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            // Ambil data dari item yang diklik
-            HashMap<String, String> selectedDonor = donorList.get(position);
+                    // Ambil data dari item yang diklik
+                    HashMap<String, String> selectedDonor = donorList.get(position);
 
-            // Intent untuk membuka Page_datapendonor
-            Intent intent = new Intent(Page_datapendonor2.this, Page_datapendonor.class);
-            intent.putExtra("nama", selectedDonor.get("nama"));
-            intent.putExtra("nohp", selectedDonor.get("nohp"));
-            intent.putExtra("lokasi_donor", selectedDonor.get("lokasi_donor"));
-            intent.putExtra("goldar", selectedDonor.get("goldar"));
-            intent.putExtra("tb", selectedDonor.get("tb"));
-            intent.putExtra("tekanan", selectedDonor.get("tekanan_darah"));
-            intent.putExtra("bb", selectedDonor.get("bb"));
-            intent.putExtra("alamat", selectedDonor.get("alamat"));
-            intent.putExtra("rhesus", selectedDonor.get("rhesus"));
-            intent.putExtra("id_pendonor", selectedDonor.get("id_pendonor"));
-            intent.putExtra("id_akun", selectedDonor.get("id_akun"));
+                    // Intent untuk membuka Page_datapendonor
+                    Intent intent = new Intent(Page_datapendonor2.this, Page_datapendonor.class);
+                    intent.putExtra("nama", selectedDonor.get("nama"));
+                    intent.putExtra("nohp", selectedDonor.get("nohp"));
+                    intent.putExtra("lokasi_donor", selectedDonor.get("lokasi_donor"));
+                    intent.putExtra("goldar", selectedDonor.get("goldar"));
+                    intent.putExtra("tb", selectedDonor.get("tb"));
+                    intent.putExtra("tekanan", selectedDonor.get("tekanan_darah"));
+                    intent.putExtra("bb", selectedDonor.get("bb"));
+                    intent.putExtra("alamat", selectedDonor.get("alamat"));
+                    intent.putExtra("rhesus", selectedDonor.get("rhesus"));
+                    intent.putExtra("id_pendonor", selectedDonor.get("id_pendonor"));
+                    intent.putExtra("id_akun", selectedDonor.get("id_akun"));
 
+                    startActivity(intent);
 
+                });
 
-            startActivity(intent);
+                    // Event listener untuk pencarian
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchDonorData(query); // Panggil data berdasarkan query pencarian
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Jika input kosong, tampilkan semua data
+                if (newText.isEmpty()) {
+                    fetchAllDonorData(); // Tampilkan semua data jika query kosong
+                }
+                return true;
+            }
         });
+
+
+        // Ambil semua data pendonor saat pertama kali halaman dimuat
+        fetchAllDonorData(); // Tampilkan semua data pendonor
     }
 
-    private void fetchDonorData() {
-        String url = Config.BASE_URL + "get_pendonor.php";
+    // Fungsi untuk mengambil semua data pendonor
+    private void fetchAllDonorData() {
+        String url = Config.BASE_URL + "get_pendonor.php";  // Endpoint untuk mendapatkan semua pendonor
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -99,7 +125,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
                                 donorList.add(donorData);
                             }
 
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged(); // Update ListView
                         } else {
                             Toast.makeText(Page_datapendonor2.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
                         }
@@ -116,4 +142,61 @@ public class Page_datapendonor2 extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
     }
+
+    private void searchDonorData(String query) {
+        String queryFormatted = query.replace(" ", "+");  // Ganti spasi dengan "+"
+        String url = Config.BASE_URL + "get_pendonor.php?nama_pendonor=" + queryFormatted;
+        // Endpoint dengan parameter pencarian
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Debugging: Cetak respon JSON untuk memeriksa struktur
+                        Log.d("Response", response.toString());
+
+                        // Pastikan ada kunci status dalam respon JSON
+                        String status = response.optString("status", "unknown");
+                        if (status.equals("success")) {
+                            JSONArray dataArray = response.getJSONArray("data");
+                            donorList.clear();
+
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject dataObj = dataArray.getJSONObject(i);
+
+                                HashMap<String, String> donorData = new HashMap<>();
+                                donorData.put("nama", dataObj.getString("nama_pendonor"));
+                                donorData.put("nohp", dataObj.optString("no_telp"));
+                                donorData.put("lokasi_donor", dataObj.getString("lokasi_donor"));
+                                donorData.put("status", dataObj.getString("status")); // Pastikan kunci "status" ada
+                                donorData.put("tekanan_darah", dataObj.optString("tekanan_darah"));
+                                donorData.put("goldar", dataObj.optString("goldar"));
+                                donorData.put("bb", dataObj.optString("berat_badan"));
+                                donorData.put("alamat", dataObj.optString("alamat"));
+                                donorData.put("rhesus", dataObj.optString("rhesus"));
+                                donorData.put("id_pendonor", dataObj.optString("id_pendonor"));
+                                donorData.put("id_akun", dataObj.optString("id_akun"));
+
+                                donorList.add(donorData);
+                            }
+
+                            adapter.notifyDataSetChanged(); // Update ListView
+                        } else {
+                            Toast.makeText(Page_datapendonor2.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(Page_datapendonor2.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(Page_datapendonor2.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+        );
+
+        queue.add(jsonObjectRequest);
+    }
+
 }
+

@@ -107,7 +107,7 @@ public class Page_login extends AppCompatActivity {
     }
 
     private void loginUser(String usernameOrEmail, String password) {
-        String url = Config.BASE_URL + "login.php";
+        String endpointLogin = Config.BASE_URL + "login.php";
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -118,7 +118,7 @@ public class Page_login extends AppCompatActivity {
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, endpointLogin, jsonBody,
                 response -> {
                     try {
                         String status = response.getString("status");

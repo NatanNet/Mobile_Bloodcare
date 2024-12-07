@@ -63,6 +63,8 @@ public class Page_edit_akun extends Fragment {
     private final String UPDATE_URL = Config.BASE_URL + "edit_akun.php"; // URL untuk update data
     private String oldUsername; // Variabel untuk menyimpan username lama
     private static final int PICK_IMAGE = 1; // Request code untuk memilih gambar
+    private String idAkun; // Variabel untuk menyimpan ID akun
+
 
     public Page_edit_akun() {
         // Required empty public constructor
@@ -80,6 +82,9 @@ public class Page_edit_akun extends Fragment {
         editTextNoHp = view.findViewById(R.id.etNomorHp);
         editTextAlamat = view.findViewById(R.id.EtAlamat);
 
+        // Panggil method untuk mengatur EditText
+        configureEditText(editTextNamaLengkap);
+
         // Inisialisasi ImageView untuk foto profil
         imgProfile = view.findViewById(R.id.imageProfil);
         Bitmap savedImage = ImageUtil.loadImageFromSharedPreferences(getContext());
@@ -95,6 +100,7 @@ public class Page_edit_akun extends Fragment {
                     .load(R.drawable.ic_profile) // Gambar default
                     .into(imgProfile); // Menampilkan gambar default
         }
+
         // Tombol kembali
         ImageButton backButton = view.findViewById(R.id.backbutton6);
         backButton.setOnClickListener(v -> getParentFragmentManager().popBackStack()); // Kembali ke fragment sebelumnya
@@ -104,12 +110,10 @@ public class Page_edit_akun extends Fragment {
         editTextNoHp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Tidak perlu diproses
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Tidak perlu diproses
             }
 
             @Override
@@ -130,27 +134,8 @@ public class Page_edit_akun extends Fragment {
             }
         }
 
-        // Menonaktifkan klik pada EditText Nama Lengkap jika sudah terisi
-        editTextNamaLengkap.setClickable(true); // Secara default nonaktifkan
-        editTextNamaLengkap.setFocusable(true);  // Menonaktifkan fokus
-
-        // Cek apakah nama lengkap sudah terisi atau belum
-        if (!editTextNamaLengkap.getText().toString().isEmpty()) {
-            editTextNamaLengkap.setClickable(true);
-            editTextNamaLengkap.setFocusable(true);
-        } else {
-            editTextNamaLengkap.setClickable(false);
-            editTextNamaLengkap.setFocusable(false);
-        }
-
         // Listener untuk EditText tanggal lahir
-        editTextTanggalLahir.setOnClickListener(v -> {
-            if (editTextTanggalLahir.getText().toString().equals("0000-00-00")) {
-                showDatePicker();
-            } else {
-                Toast.makeText(getContext(), "Tanggal lahir sudah diatur dan tidak bisa diubah", Toast.LENGTH_SHORT).show();
-            }
-        });
+        configureTanggalLahirListener();
 
         // Listener untuk tombol simpan akun
         Button simpanButton = view.findViewById(R.id.btnSimpanakun);
@@ -167,6 +152,50 @@ public class Page_edit_akun extends Fragment {
 
         return view;
     }
+
+    // Method untuk mengatur klik dan fokus
+    private void configureEditText(EditText editText) {
+        // Cek apakah teks kosong
+        if (editText.getText().toString().isEmpty()) {
+            // Jika kosong, EditText dapat diklik dan difokuskan
+            editText.setClickable(true);
+            editText.setFocusable(true);
+            editText.setFocusableInTouchMode(true); // Untuk memastikan dapat disentuh
+        } else {
+            // Jika tidak kosong, EditText tidak dapat diklik dan difokuskan
+            editText.setClickable(false);
+            editText.setFocusable(false);
+        }
+
+        // Tambahkan listener untuk perubahan teks
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Perbarui properti klik dan fokus saat teks berubah
+                configureEditText(editText);
+            }
+        });
+    }
+
+    // Method untuk listener tanggal lahir
+    private void configureTanggalLahirListener() {
+        editTextTanggalLahir.setOnClickListener(v -> {
+            if (editTextTanggalLahir.getText().toString().equals("0000-00-00")) {
+                showDatePicker();
+            } else {
+                Toast.makeText(getContext(), "Tanggal lahir sudah diatur dan tidak bisa diubah", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     // Fungsi untuk membuka galeri
     private void openGallery() {
@@ -218,25 +247,39 @@ public class Page_edit_akun extends Fragment {
                         if (response.getBoolean("success")) {
                             JSONObject data = response.getJSONObject("data");
 
-                            // Ambil data dari response JSON dan set ke EditText
-                            editTextEmail.setText(data.optString("email", ""));
-                            editTextUsername.setText(data.optString("username", ""));
-                            editTextNamaLengkap.setText(data.optString("nama_lengkap", ""));
-                            editTextTanggalLahir.setText(data.optString("tanggal_lahir", "0000-00-00"));
-                            editTextNoHp.setText(data.optString("no_hp", ""));
-                            editTextAlamat.setText(data.optString("alamat", ""));
+
+                            String idAkun = data.optString("id_akun", ""); // Ambil id_akun
+                            this.idAkun = idAkun; // Simpan ke variabel global
+
+
+                            // Ambil data dari response JSON
+
+                            String email = data.optString("email", "");
+                            String username = data.optString("username", "");
+                            String namaLengkap = data.optString("nama_lengkap", "");
+                            String tanggalLahir = data.optString("tanggal_lahir", "0000-00-00");
+                            String noHp = data.optString("no_hp", "");
+                            String alamat = data.optString("alamat", "");
+
+                            // Set data ke EditText
+                            editTextEmail.setText(email);
+                            editTextUsername.setText(username);
+                            editTextNamaLengkap.setText(namaLengkap);
+                            editTextTanggalLahir.setText(tanggalLahir);
+                            editTextNoHp.setText(noHp);
+                            editTextAlamat.setText(alamat);
+
+                            // Log id_akun untuk memastikan nilainya
+                            Log.d("ID_AKUN", "ID Akun: " + idAkun);
+
+
                         } else {
                             Toast.makeText(getContext(), "Gagal memuat data: " + response.optString("message", ""), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();;
-                        e.getMessage();
-                        Log.e("eerroR", e.getMessage());
-                        Log.e("eerroR", Arrays.toString(e.getStackTrace()));
-
-                        Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getStackTrace(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Log.e("ERROR", "Kesalahan parsing data: " + e.getMessage());
                         Toast.makeText(getContext(), "Kesalahan parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-
                     }
                 },
                 error -> Toast.makeText(getContext(), "Gagal menghubungi server: " + error.getMessage(), Toast.LENGTH_SHORT).show());
@@ -244,6 +287,7 @@ public class Page_edit_akun extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(jsonObjectRequest);
     }
+
     Uri imageUri;
     private Bitmap getBitmapFromUri(Uri uri) {
         try {
@@ -278,8 +322,13 @@ public class Page_edit_akun extends Fragment {
 
         }
 
+        if (idAkun == null || idAkun.isEmpty()) {
+            Toast.makeText(getContext(), "ID akun tidak ditemukan", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Membuat RequestBody untuk data teks lainnya
-        RequestBody idAkun = RequestBody.create(MediaType.parse("text/plain"), "28");
+        RequestBody idAkunReq = RequestBody.create(MediaType.parse("text/plain"), idAkun);
         RequestBody username = RequestBody.create(MediaType.parse("text/plain"), usernameBaru);
         RequestBody noHp = RequestBody.create(MediaType.parse("text/plain"), noTelepon);
         RequestBody alamatReq = RequestBody.create(MediaType.parse("text/plain"), alamat);
@@ -289,7 +338,7 @@ public class Page_edit_akun extends Fragment {
         // Menggunakan Retrofit untuk mengirimkan data
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ApiResponse> call = apiService.updateProfile(
-                idAkun, username, noHp, alamatReq, namaLengkapReq, tanggalLahirReq, body
+                idAkunReq, username, noHp, alamatReq, namaLengkapReq, tanggalLahirReq, body
         );
 
         call.enqueue(new Callback<ApiResponse>() {
@@ -357,7 +406,6 @@ public class Page_edit_akun extends Fragment {
         }
         return null;
     }
-
     // Fungsi untuk mengkonversi Uri menjadi byte array
     private byte[] getFileDataFromUri(Uri uri) {
         try {
@@ -374,7 +422,6 @@ public class Page_edit_akun extends Fragment {
         }
         return null;
     }
-
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
@@ -391,7 +438,4 @@ public class Page_edit_akun extends Fragment {
 
         return filePath;
     }
-
-
-
 }

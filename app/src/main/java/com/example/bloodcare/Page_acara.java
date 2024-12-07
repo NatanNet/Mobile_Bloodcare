@@ -133,7 +133,6 @@ public class Page_acara extends Fragment {
                 startActivity(intent);
             });
 
-
             // Tombol Delete
             btnDelete.setOnClickListener(v -> {
                 // Tampilkan pop-up konfirmasi sebelum menghapus

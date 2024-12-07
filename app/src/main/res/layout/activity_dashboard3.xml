@@ -17,14 +17,15 @@
         android:layout_marginTop="80dp">
 
         <!-- Profile Avatar -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
             app:shapeAppearanceOverlay="@style/CircleImage"
-            android:src="@drawable/pplaki"
-            android:layout_gravity="center" />
+            android:contentDescription="ProfileImage" />
 
         <!-- Edit Profile Button -->
         <Button
@@ -33,6 +34,7 @@
             android:layout_height="33dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/merahpmi"
             android:gravity="center"
             android:onClick="editProfileClick"
             android:padding="10dp"

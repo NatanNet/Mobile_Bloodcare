@@ -21,18 +21,18 @@
             android:fontFamily="sans-serif-medium"
             android:text="Halo,\nazka!"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="20sp" />J
 
         <!-- Profile Image -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profil"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="end"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
             app:shapeAppearanceOverlay="@style/CircleImage"
-            android:contentDescription="Profile Picture"
-            android:src="@drawable/pplaki" />
+            android:contentDescription="ProfileImage" />
     </LinearLayout>
 
     <!-- Card for Date and Time -->

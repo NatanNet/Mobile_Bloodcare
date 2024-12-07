@@ -136,26 +136,6 @@
 
 
 
-            <!-- Jumlah kantong darah -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jumlah kantong darah"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
-
-            <!-- Tekanan darah -->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/custom_edit_text_background"
-                android:hint="kantong"
-                android:inputType="number"
-                android:clickable="false"
-                android:focusable="false"
-                android:padding="8dp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

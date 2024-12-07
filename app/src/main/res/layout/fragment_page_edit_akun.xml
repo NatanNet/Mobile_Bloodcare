@@ -91,9 +91,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_background"
                 android:padding="12dp"
-                android:focusable="false"
-                android:clickable="false"
-                android:cursorVisible="false"/>
+                />
 
 
             <!-- Nama Pengguna Field -->

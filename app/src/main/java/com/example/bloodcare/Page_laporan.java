@@ -2,6 +2,7 @@ package com.example.bloodcare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -27,7 +29,9 @@ public class Page_laporan extends AppCompatActivity {
 
     private ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
     private ListView listView1;
+    private Page_laporan3 adapter;
     private final String LAPORAN_URL = Config.BASE_URL + "get_laporan.php";
+    private String selectedMonth = "all"; // Default untuk semua bulan
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,46 +42,26 @@ public class Page_laporan extends AppCompatActivity {
         ImageView iconLaporan = findViewById(R.id.iconLaporan);
         ImageButton buttonBack = findViewById(R.id.icback3);
 
+        // Inisialisasi Adapter
+        adapter = new Page_laporan3(this, dataList);
+        listView1.setAdapter(adapter);
+
+        // Tombol kembali
         buttonBack.setOnClickListener(v -> finish());
 
-        // Popup Menu Configuration
+        // Konfigurasi Popup Menu
         iconLaporan.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(Page_laporan.this, view);
             popup.getMenuInflater().inflate(R.menu.menu_popup, popup.getMenu());
 
-            popup.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
-
-                if (itemId == R.id.item_senin) {
-                    showToast("Senin dipilih");
-                } else if (itemId == R.id.item_selasa) {
-                    showToast("Selasa dipilih");
-                } else if (itemId == R.id.item_rabu) {
-                    showToast("Rabu dipilih");
-                } else if (itemId == R.id.item_kamis) {
-                    showToast("Kamis dipilih");
-                } else if (itemId == R.id.item_jumat) {
-                    showToast("Jumat dipilih");
-                } else if (itemId == R.id.item_minggu_ini) {
-                    showToast("Minggu Ini dipilih");
-                } else if (itemId == R.id.item_minggu_lalu) {
-                    showToast("Minggu Lalu dipilih");
-                } else if (itemId == R.id.item_bulan_ini) {
-                    showToast("Bulan Ini dipilih");
-                } else if (itemId == R.id.item_bulan_lalu) {
-                    showToast("Bulan Lalu dipilih");
-                } else if (itemId == R.id.item_semua) {
-                    showToast("Semua dipilih");
-                }
-                return true;
-
-            });
+            popup.setOnMenuItemClickListener(item -> handleMenuItemClick(item));
             popup.show();
         });
 
+        // Ambil data awal
         fetchLaporanData();
 
-        // Tambahkan Listener pada ListView
+        // Listener untuk item ListView
         listView1.setOnItemClickListener((parent, view, position, id) -> {
             HashMap<String, String> selectedLaporan = dataList.get(position);
             Intent intent = new Intent(Page_laporan.this, Page_laporan2.class);
@@ -93,41 +77,113 @@ public class Page_laporan extends AppCompatActivity {
         });
     }
 
+    private boolean handleMenuItemClick(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.item_januari) {
+            selectedMonth = "01";
+        } else if (itemId == R.id.item_februari) {
+            selectedMonth = "02";
+        } else if (itemId == R.id.item_maret) {
+            selectedMonth = "03";
+        } else if (itemId == R.id.item_april) {
+            selectedMonth = "04";
+        } else if (itemId == R.id.item_mei) {
+            selectedMonth = "05";
+        } else if (itemId == R.id.item_juni) {
+            selectedMonth = "06";
+        } else if (itemId == R.id.item_juli) {
+            selectedMonth = "07";
+        } else if (itemId == R.id.item_agustus) {
+            selectedMonth = "08";
+        } else if (itemId == R.id.item_september) {
+            selectedMonth = "09";
+        } else if (itemId == R.id.item_oktober) {
+            selectedMonth = "10";
+        } else if (itemId == R.id.item_november) {
+            selectedMonth = "11";
+        } else if (itemId == R.id.item_desember) {
+            selectedMonth = "12";
+        } else if (itemId == R.id.item_semua) {
+            selectedMonth = "all";
+        } else {
+            return false;
+        }
+
+
+        // Muat ulang data berdasarkan bulan yang dipilih
+        fetchLaporanData();
+        return true;
+    }
+
     private void fetchLaporanData() {
-        StringRequest request = new StringRequest(Request.Method.GET, LAPORAN_URL,
+        String requestUrl = LAPORAN_URL;
+        if (!selectedMonth.equals("all")) {
+            requestUrl += "?bulan=" + selectedMonth;
+        }
+
+        StringRequest request = new StringRequest(Request.Method.GET, requestUrl,
                 response -> {
                     try {
+                        Log.d("API Response", response);
+
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getString("status").equals("success")) {
                             JSONArray data = jsonObject.getJSONArray("data");
+
+                            // Bersihkan dataList sebelum menambahkan data baru
                             dataList.clear();
 
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject obj = data.getJSONObject(i);
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put("id_laporan", obj.optString("id_laporan"));
-                                map.put("nama", obj.getString("nama_pendonor"));
-                                map.put("nohp", obj.getString("no_telp"));
-                                map.put("lokasi_donor", obj.getString("lokasi_donor"));
-                                map.put("goldar", obj.getString("goldar"));
-                                map.put("tekanan", obj.getString("tekanan_darah"));
-                                map.put("beratbadan", obj.getString("berat_badan"));
-                                map.put("rhesus", obj.getString("rhesus"));
-                                dataList.add(map);
+                            if (data.length() > 0) {
+                                for (int i = 0; i < data.length(); i++) {
+                                    JSONObject obj = data.getJSONObject(i);
+                                    HashMap<String, String> map = new HashMap<>();
+                                    map.put("id_laporan", obj.optString("id_laporan", ""));
+                                    map.put("nama", obj.optString("nama_pendonor", ""));
+                                    map.put("nohp", obj.optString("no_telp", ""));
+                                    map.put("lokasi_donor", obj.optString("lokasi_donor", ""));
+                                    map.put("goldar", obj.optString("goldar", ""));
+                                    map.put("tekanan", obj.optString("tekanan_darah", ""));
+                                    map.put("beratbadan", obj.optString("berat_badan", ""));
+                                    map.put("rhesus", obj.optString("rhesus", ""));
+                                    dataList.add(map);
+                                }
+                            } else {
+                                // Jika tidak ada data, tampilkan pesan
+                                showToast("Tidak ada data laporan untuk bulan ini.");
                             }
 
-                            listView1.setAdapter(new Page_laporan3(Page_laporan.this, dataList));
                         } else {
-                            showToast(jsonObject.getString("message"));
+                            // Jika status bukan success
+                            showToast(jsonObject.optString("message", "Gagal memuat data."));
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
                         showToast("Error parsing data: " + e.getMessage());
+                    } finally {
+                        // Update ListView
+                        updateListView();
                     }
                 },
-                error -> showToast("Gagal mengambil data: " + error.getMessage()));
+                error -> {
+                    Log.e("API Error", "Error fetching data", error);
+                    showToast("Tidak ada data laporan untuk bulan ini.");
+                    dataList.clear();
+                    updateListView();
+                });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
+    }
+
+    private void updateListView() {
+        adapter.notifyDataSetChanged();
     }
 
     private void showToast(String message) {

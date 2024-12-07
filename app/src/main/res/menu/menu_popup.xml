@@ -1,48 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Grup Hari -->
-    <item android:id="@+id/group_hari" android:title="Hari">
-        <menu>
-        <item
-            android:id="@+id/item_senin"
-            android:title="Senin" />
-        <item 
-            android:id="@+id/item_selasa"
-            android:title="Selasa" />
-        <item
-            android:id="@+id/item_rabu"
-            android:title="Rabu" />
-        <item
-            android:id="@+id/item_kamis"
-            android:title="Kamis" />
-        <item
-            android:id="@+id/item_jumat"
-            android:title="Jumat" />
-        </menu>
-    </item>
-
-    <!-- Grup Minggu -->
-    <group android:id="@+id/group_minggu" android:title="Minggu">
-        <item
-            android:id="@+id/item_minggu_ini"
-            android:title="Minggu Ini" />
-        <item
-            android:id="@+id/item_minggu_lalu"
-            android:title="Minggu Lalu" />
-    </group>
-
-    <!-- Grup Bulan -->
-    <group android:id="@+id/group_bulan" android:title="Bulan">
-        <item
-            android:id="@+id/item_bulan_ini"
-            android:title="Bulan Ini" />
-        <item
-            android:id="@+id/item_bulan_lalu"
-            android:title="Bulan Lalu" />
-    </group>
-
-    <!-- Item Tambahan -->
-    <item
-        android:id="@+id/item_semua"
-        android:title="Semua" />
+    <item android:id="@+id/item_januari" android:title="Januari" />
+    <item android:id="@+id/item_februari" android:title="Februari" />
+    <item android:id="@+id/item_maret" android:title="Maret" />
+    <item android:id="@+id/item_april" android:title="April" />
+    <item android:id="@+id/item_mei" android:title="Mei" />
+    <item android:id="@+id/item_juni" android:title="Juni" />
+    <item android:id="@+id/item_juli" android:title="Juli" />
+    <item android:id="@+id/item_agustus" android:title="Agustus" />
+    <item android:id="@+id/item_september" android:title="September" />
+    <item android:id="@+id/item_oktober" android:title="Oktober" />
+    <item android:id="@+id/item_november" android:title="November" />
+    <item android:id="@+id/item_desember" android:title="Desember" />
+    <item android:id="@+id/item_semua" android:title="Semua" />
 </menu>

@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Page_laporan2 extends AppCompatActivity {
-
     private Button buttonlihat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class Page_laporan2 extends AppCompatActivity {
         String goldar = getIntent().getStringExtra("goldar");
         String nohp = getIntent().getStringExtra("nohp");
         String rhesus = getIntent().getStringExtra("rhesus");
-
 
         EditText editNama = findViewById(R.id.et_nama_pendonor);
         EditText editlokasi = findViewById(R.id.et_lokasi_donor);

@@ -12,7 +12,7 @@ import java.util.Map;
 public class ApiBase {
     private static ApiBase instance;
     private RequestQueue requestQueue;
-    private static final String BASE_URL = "https://example.com/api/"; // Base URL API
+    private static final String BASE_URL = "https://bloodcare.my.id/api/"; // Base URL API
 
     private ApiBase(Context context) {
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());

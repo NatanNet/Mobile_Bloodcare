@@ -1,6 +1,5 @@
 package com.example.bloodcare;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -40,20 +39,25 @@ public class Page_laporan3 extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.activity_page_laporan3, parent, false);
+            holder = new ViewHolder();
+            holder.tvNama = convertView.findViewById(R.id.textNama1);
+            holder.tvLihat = convertView.findViewById(R.id.textlihat);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-
-        TextView tvNama = convertView.findViewById(R.id.textNama1);
-        TextView tvlihat = convertView.findViewById(R.id.textlihat);
 
         HashMap<String, String> item = dataList.get(position);
 
         // Mengatur nama dari data
-        tvNama.setText(item.get("nama"));
+        holder.tvNama.setText(item.get("nama"));
 
         // Set OnClickListener untuk tvlihat
-        tvlihat.setOnClickListener(v -> {
+        holder.tvLihat.setOnClickListener(v -> {
             Intent intent = new Intent(context, Page_laporan2.class);
             intent.putExtra("id_laporan", item.get("id_laporan"));
             intent.putExtra("nama_pendonor", item.get("nama"));
@@ -65,14 +69,15 @@ public class Page_laporan3 extends BaseAdapter {
             intent.putExtra("rhesus", item.get("rhesus"));
 
             // Jalankan intent
-            if (context instanceof Activity) {
-                context.startActivity(intent);
-            } else {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
+            context.startActivity(intent);
         });
 
         return convertView;
+    }
+
+    // ViewHolder untuk optimasi
+    static class ViewHolder {
+        TextView tvNama;
+        TextView tvLihat;
     }
 }

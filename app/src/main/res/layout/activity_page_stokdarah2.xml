@@ -19,22 +19,40 @@
 
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/editgoldar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_editteks"
+        android:hint="Golongan darah"
+        android:inputType="text"
+        android:padding="12dp"
+        android:editable="false"
+        android:focusable="false"
+        android:cursorVisible="false"/>
+
+    <EditText
+        android:id="@+id/editrhesus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_editteks"
+        android:hint="rhesus"
+        android:inputType="text"
+        android:padding="12dp"
+        android:editable="false"
+        android:focusable="false"
+        android:cursorVisible="false"/>
+
+
     <EditText
         android:id="@+id/editDarahTerkumpul"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Darah terkumpul"
-        android:layout_marginTop="50dp"
-        android:inputType="number"
-        android:background="@drawable/rounded_editteks"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
-
-    <EditText
-        android:id="@+id/editKebutuhanDarah"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Kebutuhan darah"
+        android:layout_marginTop="20dp"
         android:inputType="number"
         android:background="@drawable/rounded_editteks"
         android:padding="12dp"
@@ -58,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="#D52D2D"
+        android:backgroundTint="@color/merahpmi"
         android:background="@drawable/rounded_button"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="24dp"

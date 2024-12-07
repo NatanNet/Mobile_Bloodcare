@@ -32,6 +32,9 @@ public class Page_dashboard extends AppCompatActivity {
         if ("page_editprofil".equals(redirectTo)) {
             Toast.makeText(this, "Redirecting to Edit Profile Page", Toast.LENGTH_SHORT).show();
             openEditProfileFragment(userId, usernameOrEmail);
+        } else if ("page_akun".equals(redirectTo)) {
+            Toast.makeText(this, "Redirecting to Account Page", Toast.LENGTH_SHORT).show();
+            openAccountPageFragment(usernameOrEmail); // Kirimkan usernameOrEmail ke Page_akun
         } else if (savedInstanceState == null) {
             loadDefaultFragment(savedInstanceState, usernameOrEmail);
         } else {
@@ -40,6 +43,7 @@ public class Page_dashboard extends AppCompatActivity {
             loadFragment(new Page_beranda(), usernameOrEmail); // Send usernameOrEmail to Page_beranda
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         }
+
 
         // Set up BottomNavigationView item selection listener
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
@@ -71,7 +75,7 @@ public class Page_dashboard extends AppCompatActivity {
             selectedFragment = new Page_acara();
             loadFragment(selectedFragment, usernameOrEmail); // Send usernameOrEmail to Page_acara
         } else if (item.getItemId() == R.id.navigation_akun) {
-            selectedFragment = new Page_akun();
+            openAccountPageFragment(usernameOrEmail);
         }
 
         if (selectedFragment != null) {
@@ -122,4 +126,27 @@ public class Page_dashboard extends AppCompatActivity {
                 .replace(R.id.frameLayout, fragment)
                 .commit();
     }
+    private void openAccountPageFragment(String usernameOrEmail) {
+        if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
+            Log.e("openAccountPageFragment", "usernameOrEmail is null or empty!");
+            Toast.makeText(this, "Invalid username or email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d("openAccountPageFragment", "Sending usernameOrEmail to Page_akun: " + usernameOrEmail);
+
+        // Buat instance fragment
+        Page_akun pageAkunFragment = new Page_akun();
+
+        // Kirimkan data menggunakan Bundle
+        Bundle bundle = new Bundle();
+        bundle.putString("usernameOrEmail", usernameOrEmail); // Kirim data ke fragment
+        pageAkunFragment.setArguments(bundle);
+
+        // Ganti fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, pageAkunFragment)
+                .commit();
+    }
+
 }
