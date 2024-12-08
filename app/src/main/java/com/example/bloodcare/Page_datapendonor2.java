@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.URLEncoder;
 
-
 public class Page_datapendonor2 extends AppCompatActivity {
 
     private ListView listView;
@@ -41,62 +40,60 @@ public class Page_datapendonor2 extends AppCompatActivity {
         adapter = new DonorAdapter(this, donorList);
         listView.setAdapter(adapter);
 
-        // Tombol untuk kembali ke halaman sebelumnya
+        // Button to go back to the previous page
         ImageButton buttonBack = findViewById(R.id.imageButton4);
         buttonBack.setOnClickListener(v -> finish());
 
-        // Inisialisasi SearchView
+        // Initialize SearchView
         searchView = findViewById(R.id.searchView);
-        searchView.setQueryHint("Cari nama pendonor");
+        searchView.setQueryHint("Search donor name");
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-                    // Ambil data dari item yang diklik
-                    HashMap<String, String> selectedDonor = donorList.get(position);
+            // Get the data of the selected donor
+            HashMap<String, String> selectedDonor = donorList.get(position);
 
-                    // Intent untuk membuka Page_datapendonor
-                    Intent intent = new Intent(Page_datapendonor2.this, Page_datapendonor.class);
-                    intent.putExtra("nama", selectedDonor.get("nama"));
-                    intent.putExtra("nohp", selectedDonor.get("nohp"));
-                    intent.putExtra("lokasi_donor", selectedDonor.get("lokasi_donor"));
-                    intent.putExtra("goldar", selectedDonor.get("goldar"));
-                    intent.putExtra("tb", selectedDonor.get("tb"));
-                    intent.putExtra("tekanan", selectedDonor.get("tekanan_darah"));
-                    intent.putExtra("bb", selectedDonor.get("bb"));
-                    intent.putExtra("alamat", selectedDonor.get("alamat"));
-                    intent.putExtra("rhesus", selectedDonor.get("rhesus"));
-                    intent.putExtra("id_pendonor", selectedDonor.get("id_pendonor"));
-                    intent.putExtra("id_akun", selectedDonor.get("id_akun"));
+            // Intent to open Page_datapendonor
+            Intent intent = new Intent(Page_datapendonor2.this, Page_datapendonor.class);
+            intent.putExtra("nama", selectedDonor.get("nama"));
+            intent.putExtra("nohp", selectedDonor.get("nohp"));
+            intent.putExtra("lokasi_donor", selectedDonor.get("lokasi_donor"));
+            intent.putExtra("goldar", selectedDonor.get("goldar"));
+            intent.putExtra("tb", selectedDonor.get("tb"));
+            intent.putExtra("tekanan", selectedDonor.get("tekanan_darah"));
+            intent.putExtra("bb", selectedDonor.get("bb"));
+            intent.putExtra("alamat", selectedDonor.get("alamat"));
+            intent.putExtra("rhesus", selectedDonor.get("rhesus"));
+            intent.putExtra("id_pendonor", selectedDonor.get("id_pendonor"));
+            intent.putExtra("id_akun", selectedDonor.get("id_akun"));
 
-                    startActivity(intent);
+            startActivity(intent);
+        });
 
-                });
-
-                    // Event listener untuk pencarian
+        // Search event listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchDonorData(query); // Panggil data berdasarkan query pencarian
+                searchDonorData(query); // Call the search function
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Jika input kosong, tampilkan semua data
+                // If the input is empty, show all data
                 if (newText.isEmpty()) {
-                    fetchAllDonorData(); // Tampilkan semua data jika query kosong
+                    fetchAllDonorData(); // Show all data if the query is empty
                 }
                 return true;
             }
         });
 
-
-        // Ambil semua data pendonor saat pertama kali halaman dimuat
-        fetchAllDonorData(); // Tampilkan semua data pendonor
+        // Fetch all donor data when the page is first loaded
+        fetchAllDonorData();
     }
 
-    // Fungsi untuk mengambil semua data pendonor
+    // Function to fetch all donor data
     private void fetchAllDonorData() {
-        String url = Config.BASE_URL + "get_pendonor.php";  // Endpoint untuk mendapatkan semua pendonor
+        String url = Config.BASE_URL + "get_pendonor.php";  // Endpoint for fetching all donors
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -127,7 +124,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
 
                             adapter.notifyDataSetChanged(); // Update ListView
                         } else {
-                            Toast.makeText(Page_datapendonor2.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -143,19 +140,20 @@ public class Page_datapendonor2 extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    // Function to search for donor data
     private void searchDonorData(String query) {
-        String queryFormatted = query.replace(" ", "+");  // Ganti spasi dengan "+"
+        String queryFormatted = query.replace(" ", "+");  // Replace spaces with "+"
         String url = Config.BASE_URL + "get_pendonor.php?nama_pendonor=" + queryFormatted;
-        // Endpoint dengan parameter pencarian
+        // Endpoint with search query parameter
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        // Debugging: Cetak respon JSON untuk memeriksa struktur
+                        // Debugging: Print the JSON response to inspect its structure
                         Log.d("Response", response.toString());
 
-                        // Pastikan ada kunci status dalam respon JSON
+                        // Make sure the "status" key exists in the JSON response
                         String status = response.optString("status", "unknown");
                         if (status.equals("success")) {
                             JSONArray dataArray = response.getJSONArray("data");
@@ -168,7 +166,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
                                 donorData.put("nama", dataObj.getString("nama_pendonor"));
                                 donorData.put("nohp", dataObj.optString("no_telp"));
                                 donorData.put("lokasi_donor", dataObj.getString("lokasi_donor"));
-                                donorData.put("status", dataObj.getString("status")); // Pastikan kunci "status" ada
+                                donorData.put("status", dataObj.getString("status"));
                                 donorData.put("tekanan_darah", dataObj.optString("tekanan_darah"));
                                 donorData.put("goldar", dataObj.optString("goldar"));
                                 donorData.put("bb", dataObj.optString("berat_badan"));
@@ -182,7 +180,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
 
                             adapter.notifyDataSetChanged(); // Update ListView
                         } else {
-                            Toast.makeText(Page_datapendonor2.this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -198,5 +196,12 @@ public class Page_datapendonor2 extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-}
+    // Override onResume to reload the data when the user returns
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        // Call the function to reload donor data when the activity resumes
+        fetchAllDonorData();
+    }
+}

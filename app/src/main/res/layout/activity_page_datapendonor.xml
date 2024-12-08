@@ -100,7 +100,9 @@
             android:hint="No.hp"
             android:background="@drawable/custom_edit_text_background"
             android:padding="8dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:clickable="false"
+            android:focusable="false"/>
 
         <!-- Tinggi badan/berat badan -->
         <TextView

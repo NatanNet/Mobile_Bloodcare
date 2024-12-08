@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class Page_otpverif extends AppCompatActivity {
     private Button btnVerifikasi;
     private String verificationId;
     private String email;
+    private TextView textViewResendOtp;  // Tambahkan TextView untuk Kirim Ulang Kode OTP
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class Page_otpverif extends AppCompatActivity {
         text4 = findViewById(R.id.text4);
         text5 = findViewById(R.id.text5);
         btnVerifikasi = findViewById(R.id.btn_verifikasi);
+        textViewResendOtp = findViewById(R.id.tvkirimulang); // Inisialisasi TextView Kirim Ulang Kode OTP
         ImageButton backButton = findViewById(R.id.backbutton2);
 
         // Menetapkan fungsi tombol kembali
@@ -63,19 +66,32 @@ public class Page_otpverif extends AppCompatActivity {
         addTextWatcher(text3, text4);
         addTextWatcher(text4, text5);
         addTextWatcher(text5, null);  // Tidak ada EditText selanjutnya untuk yang terakhir
+// Menangani klik tombol verifikasi
+        btnVerifikasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Mengambil nilai OTP dari EditText
+                String otp = text1.getText().toString() + text2.getText().toString() +
+                        text3.getText().toString() + text4.getText().toString() +
+                        text5.getText().toString();
 
-        // Menangani klik tombol verifikasi
-        btnVerifikasi.setOnClickListener(v -> {
-            String otp = text1.getText().toString() + text2.getText().toString() +
-                    text3.getText().toString() + text4.getText().toString() +
-                    text5.getText().toString();
-
-            if (otp.length() == 5) {
-                verifyOtp(otp);  // Panggil fungsi verifikasi OTP
-            } else {
-                Toast.makeText(Page_otpverif.this, "Masukkan OTP yang valid", Toast.LENGTH_SHORT).show();
+                // Mengecek apakah panjang OTP valid
+                if (otp.length() == 5) {
+                    verifyOtp(otp);  // Panggil fungsi untuk memverifikasi OTP
+                } else {
+                    Toast.makeText(Page_otpverif.this, "Masukkan OTP yang valid", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        // Menangani klik untuk kirim ulang OTP
+        textViewResendOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendOtp(email);  // Memanggil metode sendOtp untuk mengirim ulang OTP
+            }
+        });
+
     }
 
     private void addTextWatcher(final EditText currentEditText, final EditText nextEditText) {
@@ -134,4 +150,40 @@ public class Page_otpverif extends AppCompatActivity {
 
         requestQueue.add(jsonObjectRequest);
     }
+
+    // Fungsi untuk mengirim ulang OTP
+    private void sendOtp(String email) {
+        String url = Config.BASE_URL + "send_otp.php";  // URL server PHP Anda
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        String message = response.getString("message");
+
+                        if (status.equals("success")) {
+                            Toast.makeText(Page_otpverif.this, "OTP berhasil dikirim ulang", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(Page_otpverif.this, message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        Toast.makeText(Page_otpverif.this, "Kesalahan JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(Page_otpverif.this, "Gagal mengirim OTP: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        );
+
+        requestQueue.add(jsonObjectRequest);
+    }
 }
+
+

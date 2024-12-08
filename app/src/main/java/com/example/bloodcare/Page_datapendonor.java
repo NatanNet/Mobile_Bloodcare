@@ -75,6 +75,8 @@ public class Page_datapendonor extends AppCompatActivity {
         // Button Update/Insert
         Button btnUpdate = findViewById(R.id.btnsimpanpendonor);
         btnUpdate.setOnClickListener(v -> {
+
+            recreate();
             // Ambil data yang diperlukan untuk update atau input
 
             String newGoldar = editGoldar.getText().toString().trim();
@@ -91,7 +93,7 @@ public class Page_datapendonor extends AppCompatActivity {
                     // Update data pendonor
                     updateDonorData(id_pendonor, newGoldar, newBerat, newRhesus, newTekanan, () -> {
                         // Setelah update berhasil, lakukan insert laporan
-//                        insertLaporanData(nama, nohp, lokasiDonor, newBerat, newGoldar, newTekanan, newRhesus);
+//                       insertLaporanData(nama, nohp, lokasiDonor, newBerat, newGoldar, newTekanan, newRhesus);
                     });
 
                     sendSertifikatRequest(getApplicationContext(),id_akun,lokasiDonor);

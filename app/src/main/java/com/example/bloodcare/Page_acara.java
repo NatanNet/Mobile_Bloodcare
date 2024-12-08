@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog; // Import AlertDialog
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -118,8 +119,7 @@ public class Page_acara extends Fragment {
             String waktu = item.get("time_waktu");
             String tanggal = item.get("tgl_acara");
 
-            textNama.setText("Lokasi: " + lokasi + "\nFasilitas: " + fasilitas + "\ntime_Waktu: " + waktu + "\ntgl_acara: " + tanggal);
-
+            textNama.setText("Lokasi: " + lokasi + "\nFasilitas: " + fasilitas + "\nWaktu: " + waktu + "\nTanggal Acara: " + tanggal);
 
             // Tombol Edit
             btnEdit.setOnClickListener(v -> {
@@ -142,7 +142,17 @@ public class Page_acara extends Fragment {
                         .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                deleteData(item.get("id_acara")); // Panggil fungsi deleteData jika Ya
+                                // Panggil fungsi deleteData jika Ya
+                                deleteData(item.get("id_acara"));
+
+                                // Setelah data dihapus, lakukan refresh fragment
+                                Fragment currentFragment = getParentFragmentManager().findFragmentById(R.id.frameLayout);
+                                if (currentFragment != null) {
+                                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                    fragmentTransaction.detach(currentFragment); // Melepaskan Fragment
+                                    fragmentTransaction.attach(currentFragment); // Memasang kembali Fragment
+                                    fragmentTransaction.commit();
+                                }
                             }
                         })
                         .setNegativeButton("Tidak", null)

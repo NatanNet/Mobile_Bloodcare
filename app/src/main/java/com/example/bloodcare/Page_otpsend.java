@@ -41,21 +41,21 @@ public class Page_otpsend extends AppCompatActivity {
         // Inisialisasi RequestQueue Volley
         requestQueue = Volley.newRequestQueue(this);
 
-        sendOtpButton.setOnClickListener(new View.OnClickListener() {
+        sendOtpButton.setOnClickListener(v -> {
+            // Menonaktifkan tombol setelah diklik
+            sendOtpButton.setEnabled(false);
 
+            String email = emailEditText.getText().toString().trim();
+            if (!email.isEmpty()) {
+                // Pindah langsung ke halaman verifikasi OTP tanpa menunggu OTP berhasil terkirim
+                Intent intent = new Intent(Page_otpsend.this, Page_otpverif.class);
+                intent.putExtra("email", email);
+                startActivity(intent);
 
-            @Override
-            public void onClick(View v) {
-
-                // Menonaktifkan tombol setelah diklik
-                sendOtpButton.setEnabled(false);
-
-                String email = emailEditText.getText().toString().trim();
-                if (!email.isEmpty()) {
-                    sendOtp(email);
-                } else {
-                    Toast.makeText(Page_otpsend.this, "Please enter an email", Toast.LENGTH_SHORT).show();
-                }
+                // Kemudian baru kirim OTP
+                sendOtp(email);
+            } else {
+                Toast.makeText(Page_otpsend.this, "Please enter an email", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -85,12 +85,6 @@ public class Page_otpsend extends AppCompatActivity {
 
                             if (status.equals("success")) {
                                 Toast.makeText(Page_otpsend.this, "OTP sent successfully!", Toast.LENGTH_SHORT).show();
-
-                                // Transition to otp_input activity
-                                Intent intent = new Intent(Page_otpsend.this, Page_otpverif.class);
-                                intent.putExtra("email",email);
-
-                                startActivity(intent);
                             } else {
                                 Toast.makeText(Page_otpsend.this, message, Toast.LENGTH_SHORT).show();
                             }
@@ -113,3 +107,5 @@ public class Page_otpsend extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 }
+
+

@@ -53,7 +53,7 @@
             android:onClick="editProfileClick"
             android:padding="10dp"
             android:text="edit profil"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
