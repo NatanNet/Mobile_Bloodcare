@@ -76,12 +76,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahAplus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -133,12 +128,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahAmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
             <ImageView
                 android:id="@+id/iconEditAmin"
@@ -191,12 +181,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahBplus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -248,12 +233,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahBmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -305,12 +285,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahABplus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -361,12 +336,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahABmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -417,12 +387,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahOplus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView
@@ -473,12 +438,7 @@
                     android:layout_height="wrap_content"
                     android:text="Darah terkumpul: 0"
                     android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/KebutuhanDarahOmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kebutuhan darah: 0"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <ImageView

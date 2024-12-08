@@ -21,19 +21,23 @@ import org.json.JSONObject;
 
 public class Page_stokdarah extends AppCompatActivity {
 
+    // Declare TextViews for displaying the stock data
     private TextView stokAPlus, stokAMinus, stokBPlus, stokBMinus, stokABPlus, stokABMinus, stokOPlus, stokOMinus;
 
-    private static final String URL = Config.BASE_URL + "get_stokdarah.php"; // URL API Anda
+    // URL for fetching stock data from the server
+    private static final String URL = Config.BASE_URL + "get_stokdarah.php";
+    private static final int REQUEST_CODE_UPDATE = 1; // Request code for activity result
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_stokdarah);
-        ImageButton buttonBack = findViewById(R.id.icback2);
 
+        // Initialize the back button and its click listener
+        ImageButton buttonBack = findViewById(R.id.icback2);
         buttonBack.setOnClickListener(v -> finish());
 
-        // Inisialisasi TextView
+        // Initialize the TextViews
         stokAPlus = findViewById(R.id.DarahTerkumpulAplus);
         stokAMinus = findViewById(R.id.DarahTerkumpulAmin);
         stokBPlus = findViewById(R.id.DarahTerkumpulBplus);
@@ -43,76 +47,56 @@ public class Page_stokdarah extends AppCompatActivity {
         stokOPlus = findViewById(R.id.DarahTerkumpulOplus);
         stokOMinus = findViewById(R.id.DarahTerkumpulOmin);
 
-        //Inisialisasi ImageView
-        ImageView imgAPluss = findViewById(R.id.iconEditAplus);
-        ImageView imgAMinuss = findViewById(R.id.iconEditAmin);
-        ImageView imgABPluss = findViewById(R.id.iconEditABplus);
-        ImageView imgABMinuss = findViewById(R.id.iconEditABmin);
-        ImageView imgBMinuss = findViewById(R.id.iconEditBmin);
-        ImageView imgBPluss = findViewById(R.id.iconEditBplus);
-        ImageView imgOMinuss = findViewById(R.id.iconEditOmin);
-        ImageView imgOPluss = findViewById(R.id.iconEditOplus);
+        // Initialize ImageViews for the edit icons
+        ImageView imgAPlus = findViewById(R.id.iconEditAplus);
+        ImageView imgAMinus = findViewById(R.id.iconEditAmin);
+        ImageView imgBPlus = findViewById(R.id.iconEditBplus);
+        ImageView imgBMinus = findViewById(R.id.iconEditBmin);
+        ImageView imgABPlus = findViewById(R.id.iconEditABplus);
+        ImageView imgABMinus = findViewById(R.id.iconEditABmin);
+        ImageView imgOPlus = findViewById(R.id.iconEditOplus);
+        ImageView imgOMinus = findViewById(R.id.iconEditOmin);
 
-        ImageView imgAPlus = findViewById(R.id.iconGolonganAplus);
-        ImageView imgAMinus = findViewById(R.id.iconGolonganAmin);
-        ImageView imgBPlus = findViewById(R.id.iconGolonganBplus);
-        ImageView imgBMinus = findViewById(R.id.iconGolonganBmin);
-        ImageView imgABPlus = findViewById(R.id.iconGolonganABplus);
-        ImageView imgABMinus = findViewById(R.id.iconGolonganABmin);
-        ImageView imgOPlus = findViewById(R.id.iconGolonganOplus);
-        ImageView imgOMinus = findViewById(R.id.iconGolonganOmin);
+        // Set the click listeners for each ImageView to navigate to the update page
+        imgAPlus.setOnClickListener(view -> navigateToDetail("A", "positive", true, getStokFromTextView(stokAPlus)));
+        imgAMinus.setOnClickListener(view -> navigateToDetail("A", "negative", true, getStokFromTextView(stokAMinus)));
+        imgBPlus.setOnClickListener(view -> navigateToDetail("B", "positive", true, getStokFromTextView(stokBPlus)));
+        imgBMinus.setOnClickListener(view -> navigateToDetail("B", "negative", true, getStokFromTextView(stokBMinus)));
+        imgABPlus.setOnClickListener(view -> navigateToDetail("AB", "positive", true, getStokFromTextView(stokABPlus)));
+        imgABMinus.setOnClickListener(view -> navigateToDetail("AB", "negative", true, getStokFromTextView(stokABMinus)));
+        imgOPlus.setOnClickListener(view -> navigateToDetail("O", "positive", true, getStokFromTextView(stokOPlus)));
+        imgOMinus.setOnClickListener(view -> navigateToDetail("O", "negative", true, getStokFromTextView(stokOMinus)));
 
-        // Set onClickListener untuk setiap ImageView untuk input baru
-        imgAPlus.setOnClickListener(view -> navigateToDetail("A", "positive", false, 0));
-        imgAMinus.setOnClickListener(view -> navigateToDetail("A", "negative", false, 0));
-        imgBPlus.setOnClickListener(view -> navigateToDetail("B", "positive", false, 0));
-        imgBMinus.setOnClickListener(view -> navigateToDetail("B", "negative", false, 0));
-        imgABPlus.setOnClickListener(view -> navigateToDetail("AB", "positive", false, 0));
-        imgABMinus.setOnClickListener(view -> navigateToDetail("AB", "negative", false, 0));
-        imgOPlus.setOnClickListener(view -> navigateToDetail("O", "positive", false, 0));
-        imgOMinus.setOnClickListener(view -> navigateToDetail("O", "negative", false, 0));
-
-        // Set onClickListener untuk setiap ImageView jika ingin memperbarui stok
-        imgAPluss.setOnClickListener(view -> navigateToDetail("A", "positive", true, getStokFromTextView(stokAPlus)));
-        imgAMinuss.setOnClickListener(view -> navigateToDetail("A", "negative", true, getStokFromTextView(stokAMinus)));
-        imgBPluss.setOnClickListener(view -> navigateToDetail("B", "positive", true, getStokFromTextView(stokBPlus)));
-        imgBMinuss.setOnClickListener(view -> navigateToDetail("B", "negative", true, getStokFromTextView(stokBMinus)));
-        imgABPluss.setOnClickListener(view -> navigateToDetail("AB", "positive", true, getStokFromTextView(stokABPlus)));
-        imgABMinuss.setOnClickListener(view -> navigateToDetail("AB", "negative", true, getStokFromTextView(stokABMinus)));
-        imgOPluss.setOnClickListener(view -> navigateToDetail("O", "positive", true, getStokFromTextView(stokOPlus)));
-        imgOMinuss.setOnClickListener(view -> navigateToDetail("O", "negative", true, getStokFromTextView(stokOMinus)));
-
-        // Ambil data stok dari server
+        // Fetch the blood stock data from the server
         getStokDarah();
     }
 
-    // Fungsi untuk mengambil nilai stok darah dari TextView
+    // Method to extract stock number from TextView (removes non-numeric characters)
     private int getStokFromTextView(TextView textView) {
         String text = textView.getText().toString().replaceAll("[^0-9]", "");
         return text.isEmpty() ? 0 : Integer.parseInt(text);
     }
 
-    // Fungsi untuk menavigasi ke halaman detail
+    // Method to navigate to the detail page for updating or viewing stock
     private void navigateToDetail(String golonganDarah, String rhesus, boolean isUpdate, int jumlahStok) {
-        // Navigasi ke halaman detail
         Intent intent = new Intent(Page_stokdarah.this, Page_stokdarah2.class);
         intent.putExtra("golongan_darah", golonganDarah);
         intent.putExtra("rhesus", rhesus);
-        intent.putExtra("is_update", isUpdate); // Flag untuk menentukan mode
-        intent.putExtra("jumlah_stok", jumlahStok); // Kirimkan jumlah stok untuk update
-        startActivity(intent);
+        intent.putExtra("is_update", isUpdate); // Flag to indicate update mode
+        intent.putExtra("jumlah_stok", jumlahStok); // Send current stock for update
+        startActivityForResult(intent, REQUEST_CODE_UPDATE); // Start activity for result
+
     }
 
-    // Mengambil data stok dari server
+    // Method to fetch blood stock data from the server
     private void getStokDarah() {
-        // Buat Request ke server
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
                 response -> {
                     try {
-                        // Ambil objek "data" dari respons JSON
+                        // Get the data object from the response
                         JSONObject data = response.getJSONObject("data");
 
-                        // Ambil nilai dari masing-masing kunci dan set ke TextView
+                        // Set the fetched stock data into the TextViews
                         stokAPlus.setText("Darah terkumpul : " + data.getInt("A_plus"));
                         stokAMinus.setText("Darah terkumpul : " + data.getInt("A_minus"));
                         stokBPlus.setText("Darah terkumpul : " + data.getInt("B_plus"));
@@ -125,15 +109,34 @@ public class Page_stokdarah extends AppCompatActivity {
                         e.printStackTrace();
                         Toast.makeText(this, "Error parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
                 },
                 error -> {
                     error.printStackTrace();
                     Toast.makeText(this, "Gagal mengambil data stok: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 });
 
-        // Tambahkan request ke RequestQueue
+        // Add request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
+    }
+
+
+
+
+
+    // Handling the result when returning from the update activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_UPDATE) {
+            if (resultCode == RESULT_OK && data != null) {
+                // Check if the data update requires a refresh
+                boolean refreshNeeded = data.getBooleanExtra("refresh_needed", false);
+                if (refreshNeeded) {
+                    // Refresh the data from the server
+                    getStokDarah(); // Re-fetch the data from the server
+                }
+            }
+        }
     }
 }

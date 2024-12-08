@@ -1,5 +1,6 @@
 package com.example.bloodcare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -79,11 +80,7 @@ public class Page_stokdarah2 extends AppCompatActivity {
         btnSubmit.setOnClickListener(v -> {
             String jumlahDarah = etDarahTerkumpul.getText().toString().trim();
 
-
-
-
             try {
-
 
                 if (isUpdate) {
                     // Panggil fungsi untuk memperbarui stok darah
@@ -96,7 +93,6 @@ public class Page_stokdarah2 extends AppCompatActivity {
                 Toast.makeText(this, "Input jumlah/kebutuhan harus berupa angka yang valid!", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         // Menyiapkan tombol kembali
         ImageButton buttonBack = findViewById(R.id.icback);
@@ -219,6 +215,7 @@ public class Page_stokdarah2 extends AppCompatActivity {
 
                             Toast.makeText(this, "Data berhasil dimuat", Toast.LENGTH_SHORT).show();
                         } else {
+                            etDarahTerkumpul.setText("0");
                             String errorMessage = response.optString("message", "Data tidak ditemukan.");
                             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
                         }
@@ -266,7 +263,12 @@ public class Page_stokdarah2 extends AppCompatActivity {
                             // Cek apakah respons dari server sukses
                             if (response.has("success") && response.getBoolean("success")) {
                                 Toast.makeText(this, "Stok darah berhasil diperbarui", Toast.LENGTH_SHORT).show();
-                                finish(); // Kembali ke halaman sebelumnya setelah update
+
+                                // Kirim data pembaruan dan kembali ke halaman sebelumnya
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra("refresh_needed", true);
+                                setResult(RESULT_OK, resultIntent);  // Notify parent activity that the data has been updated
+                                finish(); // Kembali ke halaman sebelumnya
                             } else {
                                 String errorMessage = response.optString("message", "Gagal memperbarui stok.");
                                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
@@ -291,6 +293,5 @@ public class Page_stokdarah2 extends AppCompatActivity {
             Toast.makeText(this, "Error creating JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
 }
