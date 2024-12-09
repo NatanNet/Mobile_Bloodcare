@@ -86,6 +86,7 @@
                 android:src="@drawable/ic_jam" />
 
             <TextView
+                android:id="@+id/textViewClock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

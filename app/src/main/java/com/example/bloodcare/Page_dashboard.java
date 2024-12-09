@@ -1,12 +1,18 @@
 package com.example.bloodcare;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,11 +20,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class Page_dashboard extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
+    private static final int PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        // Periksa dan minta izin
+        checkStoragePermission();
 
         // Initialize BottomNavigationView
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -34,19 +44,88 @@ public class Page_dashboard extends AppCompatActivity {
             openEditProfileFragment(userId, usernameOrEmail);
         } else if ("page_akun".equals(redirectTo)) {
             Toast.makeText(this, "Redirecting to Account Page", Toast.LENGTH_SHORT).show();
-            openAccountPageFragment(usernameOrEmail); // Kirimkan usernameOrEmail ke Page_akun
+            openAccountPageFragment(usernameOrEmail);
         } else if (savedInstanceState == null) {
             loadDefaultFragment(savedInstanceState, usernameOrEmail);
         } else {
-            // Fallback to dashboard or default fragment if no other conditions are met
             Toast.makeText(this, "Redirecting to Default Dashboard", Toast.LENGTH_SHORT).show();
-            loadFragment(new Page_beranda(), usernameOrEmail); // Send usernameOrEmail to Page_beranda
+            loadFragment(new Page_beranda(), usernameOrEmail);
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         }
 
-
         // Set up BottomNavigationView item selection listener
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    private void checkStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+: Cek izin READ_MEDIA_IMAGES dan READ_MEDIA_VIDEO
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+                requestStoragePermission();
+            } else {
+                onStoragePermissionGranted();
+            }
+        } else {
+            // Android di bawah 13: Gunakan izin READ_EXTERNAL_STORAGE dan WRITE_EXTERNAL_STORAGE
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestStoragePermission();
+            } else {
+                onStoragePermissionGranted();
+            }
+        }
+    }
+
+    private void requestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+: Minta izin media untuk gambar dan video saja
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            Manifest.permission.READ_MEDIA_IMAGES,
+                            Manifest.permission.READ_MEDIA_VIDEO
+                    },
+                    PERMISSION_REQUEST_CODE
+            );
+        } else {
+            // Android di bawah 13: Minta izin penyimpanan eksternal
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    PERMISSION_REQUEST_CODE
+            );
+        }
+    }
+
+
+    private void onStoragePermissionGranted() {
+        // Logika setelah izin diberikan
+        Toast.makeText(this, "Izin diberikan. Anda dapat mengakses file.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                boolean allPermissionsGranted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allPermissionsGranted = false;
+                        break;
+                    }
+                }
+                if (allPermissionsGranted) {
+                    onStoragePermissionGranted();
+                } else {
+                    Toast.makeText(this, "Izin akses penyimpanan ditolak", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     // Load the default fragment based on the intent's targetFragment or savedInstanceState
@@ -126,6 +205,7 @@ public class Page_dashboard extends AppCompatActivity {
                 .replace(R.id.frameLayout, fragment)
                 .commit();
     }
+
     private void openAccountPageFragment(String usernameOrEmail) {
         if (usernameOrEmail == null || usernameOrEmail.isEmpty()) {
             Log.e("openAccountPageFragment", "usernameOrEmail is null or empty!");

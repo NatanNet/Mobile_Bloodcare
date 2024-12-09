@@ -91,9 +91,8 @@ public class Page_datapendonor2 extends AppCompatActivity {
         fetchAllDonorData();
     }
 
-    // Function to fetch all donor data
     private void fetchAllDonorData() {
-        String url = Config.BASE_URL + "get_pendonor.php";  // Endpoint for fetching all donors
+        String url = Config.BASE_URL + "get_pendonor.php";  // Endpoint untuk mengambil semua data pendonor
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -119,10 +118,11 @@ public class Page_datapendonor2 extends AppCompatActivity {
                                 donorData.put("id_pendonor", dataObj.optString("id_pendonor"));
                                 donorData.put("id_akun", dataObj.optString("id_akun"));
 
-                                donorList.add(donorData);
+                                // Tambahkan data di awal list
+                                donorList.add(0, donorData);
                             }
 
-                            adapter.notifyDataSetChanged(); // Update ListView
+                            adapter.notifyDataSetChanged(); // Perbarui ListView
                         } else {
                             Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
                         }
@@ -140,20 +140,17 @@ public class Page_datapendonor2 extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    // Function to search for donor data
+
     private void searchDonorData(String query) {
-        String queryFormatted = query.replace(" ", "+");  // Replace spaces with "+"
+        String queryFormatted = query.replace(" ", "+");  // Format query
         String url = Config.BASE_URL + "get_pendonor.php?nama_pendonor=" + queryFormatted;
-        // Endpoint with search query parameter
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        // Debugging: Print the JSON response to inspect its structure
-                        Log.d("Response", response.toString());
+                        Log.d("Response", response.toString()); // Debug response
 
-                        // Make sure the "status" key exists in the JSON response
                         String status = response.optString("status", "unknown");
                         if (status.equals("success")) {
                             JSONArray dataArray = response.getJSONArray("data");
@@ -175,10 +172,11 @@ public class Page_datapendonor2 extends AppCompatActivity {
                                 donorData.put("id_pendonor", dataObj.optString("id_pendonor"));
                                 donorData.put("id_akun", dataObj.optString("id_akun"));
 
-                                donorList.add(donorData);
+                                // Tambahkan data di awal list
+                                donorList.add(0, donorData);
                             }
 
-                            adapter.notifyDataSetChanged(); // Update ListView
+                            adapter.notifyDataSetChanged(); // Perbarui ListView
                         } else {
                             Toast.makeText(Page_datapendonor2.this, "Data not found", Toast.LENGTH_SHORT).show();
                         }
@@ -195,6 +193,7 @@ public class Page_datapendonor2 extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
     }
+
 
     // Override onResume to reload the data when the user returns
     @Override

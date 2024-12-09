@@ -3,6 +3,7 @@ package com.example.bloodcare;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Page_beranda extends Fragment {
 
     private RequestQueue requestQueue;
     private TextView halo;
+    private Handler handler;
+    private Runnable clockRunnable;
+    private TextView clockTextView;
 
     public Page_beranda() {
         // Required empty public constructor
@@ -46,6 +52,10 @@ public class Page_beranda extends Fragment {
 
         requestQueue = Volley.newRequestQueue(requireContext());
         halo = view.findViewById(R.id.idhalo);
+        clockTextView = view.findViewById(R.id.textViewClock);
+
+        // Menjalankan fungsi untuk menampilkan jam
+        startClock();
 
         // Mengambil username atau email dari arguments
         Bundle bundle = getArguments();
@@ -79,6 +89,22 @@ public class Page_beranda extends Fragment {
 
         return view;
     }
+
+    private void startClock() {
+        handler = new Handler();
+        clockRunnable = new Runnable() {
+            @Override
+            public void run() {
+                String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+                clockTextView.setText(currentTime);
+                handler.postDelayed(this, 1000); // Perbarui setiap 1 detik
+            }
+        };
+        handler.post(clockRunnable); // Jalankan pertama kali
+    }
+
+
+
 
     private void fetchUserFullName(String usernameOrEmail) {
         String url = Config.BASE_URL + "get_user_fullname.php?username_or_email=" + usernameOrEmail;
@@ -135,6 +161,10 @@ public class Page_beranda extends Fragment {
         super.onDestroy();
         if (requestQueue != null) {
             requestQueue.cancelAll(this);
+        }
+        // Hentikan handler untuk mencegah kebocoran memori
+        if (handler != null && clockRunnable != null) {
+            handler.removeCallbacks(clockRunnable);
         }
     }
 }
