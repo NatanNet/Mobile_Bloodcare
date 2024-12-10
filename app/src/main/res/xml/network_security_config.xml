@@ -2,7 +2,7 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="true" />
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">192.168.18.129</domain> <!-- Pastikan ini adalah alamat IP yang benar -->
+        <domain includeSubdomains="true">bloodcare.my.id</domain> <!-- Pastikan ini adalah alamat IP yang benar -->
     </domain-config>
 </network-security-config>
 

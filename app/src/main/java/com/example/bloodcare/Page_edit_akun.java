@@ -85,7 +85,7 @@ public class Page_edit_akun extends Fragment {
         // Panggil method untuk mengatur EditText
         configureEditText(editTextNamaLengkap);
 
-        // Inisialisasi ImageView untuk foto profil
+        // Inisialisasi ImageView untuk foto profil PROFILLLLL PASTI PASSS
         imgProfile = view.findViewById(R.id.imageProfil);
         Bitmap savedImage = ImageUtil.loadImageFromSharedPreferences(getContext());
 
@@ -147,7 +147,7 @@ public class Page_edit_akun extends Fragment {
             saveDataAkun(oldUsername);
         });
 
-        // Listener untuk foto profil
+        // Listener untuk foto profil open glry ft
         imgProfile.setOnClickListener(v -> openGallery());
 
         return view;
